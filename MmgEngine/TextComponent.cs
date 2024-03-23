@@ -17,7 +17,7 @@ public class TextComponent : DrawableGameComponent
     public Vector2 Position { get; set; }
     public Color Color { get; set; }
     public float Opacity { get; set; }
-    public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(_rotation); }
+    public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
     public float Scale { get; set; }
     public string Text { get => _text; set {_text = value; RelocatePivot();} }
 
