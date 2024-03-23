@@ -6,52 +6,49 @@ namespace MmgEngine;
 public class Animation<T>
 {
     #region Fields
-    private T[] _frames;
-    private int pos;
-    private int frameDelay;
-    private bool isLooped;
-    private readonly int frameDuration;
+    private readonly T[] _frames;
+    private int _pos;
+    private int _frameDelay;
+    private readonly bool _isLooped;
+    private readonly int _frameDuration;
     public bool Paused { get; set; } = false;
     #endregion
 
     public Animation(T[] frames, bool looped, int frameDuration = 1)
     {
         _frames = frames;
-        isLooped = looped;
-        pos = _frames.Length - 1;
-        this.frameDuration = frameDuration - 1;
-        frameDelay = this.frameDuration;
+        _isLooped = looped;
+        _pos = _frames.Length - 1;
+        _frameDuration = frameDuration - 1;
+        _frameDelay = _frameDuration;
     }
 
-    public void Start() => pos = 0;
+    public void Start() => _pos = 0;
 
     public T NextFrame()
     {
         if (Paused)
             return CurrentFrame();
 
-        if (pos > _frames.Length - 1)
+        if (_pos > _frames.Length - 1)
         {
-            if (isLooped)
-                pos = 0;
+            if (_isLooped)
+                _pos = 0;
             else
-                return _frames[pos-1];
+                return _frames[_pos-1];
         }
 
-        if (frameDelay-- > 0)
-            return _frames[pos];
+        if (_frameDelay-- > 0)
+            return _frames[_pos];
 
-        frameDelay = frameDuration;
+        _frameDelay = _frameDuration;
 
-        return _frames[Paused ? pos : pos++];
+        return _frames[Paused ? _pos : _pos++];
     }
 
-    public T CurrentFrame() 
-    {   
-        if (pos < _frames.Length)
-            return _frames[pos];
-        else
-            return _frames[pos-1];
+    public T CurrentFrame()
+    {
+        return _pos < _frames.Length ? _frames[_pos] : _frames[_pos-1];
     }
 
     public T[] GetFrames() => _frames;

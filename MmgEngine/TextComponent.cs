@@ -6,11 +6,11 @@ namespace MmgEngine;
 public class TextComponent : DrawableGameComponent
 {
     #region Fields
-    private SpriteFont font;
-    private Alignment anchor;
+    private readonly SpriteFont _font;
+    private readonly Alignment _anchor;
     private string _text;
     private float _rotation;
-    private Vector2 pivot;
+    private Vector2 _pivot;
     #endregion
 
     #region Properties
@@ -25,12 +25,12 @@ public class TextComponent : DrawableGameComponent
 
     public TextComponent(Game game, SpriteFont font, string defaultText, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.CenterLeft, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
     {
-        this.font = font;
+        _font = font;
         Position = position;
         DrawOrder = layer;
         Visible = visible;
-        this.anchor = anchor;
-        this.Color = color ?? Color.White;
+        _anchor = anchor;
+        Color = color ?? Color.White;
         Opacity = opacity;
         Rotation = rotation;
         Scale = scale;
@@ -39,32 +39,32 @@ public class TextComponent : DrawableGameComponent
 
     private void RelocatePivot()
     {
-        pivot = anchor switch
+        _pivot = _anchor switch
         {
             Alignment.TopLeft => Vector2.Zero,
-            Alignment.TopCenter => new Vector2(font.MeasureString(_text).X / 2, 0f),
-            Alignment.TopRight => new Vector2(font.MeasureString(_text).X, 0f),
-            Alignment.CenterLeft => new Vector2(0f, font.MeasureString(_text).Y / 2),
-            Alignment.Center => new Vector2(font.MeasureString(_text).X / 2, font.MeasureString(_text).Y / 2),
-            Alignment.CenterRight => new Vector2(font.MeasureString(_text).X, font.MeasureString(_text).Y / 2),
-            Alignment.BottomLeft => new Vector2(0f, font.MeasureString(_text).Y),
-            Alignment.BottomCenter => new Vector2(font.MeasureString(_text).X / 2, font.MeasureString(_text).Y),
-            Alignment.BottomRight => new Vector2(font.MeasureString(_text).X, font.MeasureString(_text).Y),
+            Alignment.TopCenter => new Vector2(_font.MeasureString(_text).X / 2, 0f),
+            Alignment.TopRight => new Vector2(_font.MeasureString(_text).X, 0f),
+            Alignment.CenterLeft => new Vector2(0f, _font.MeasureString(_text).Y / 2),
+            Alignment.Center => new Vector2(_font.MeasureString(_text).X / 2, _font.MeasureString(_text).Y / 2),
+            Alignment.CenterRight => new Vector2(_font.MeasureString(_text).X, _font.MeasureString(_text).Y / 2),
+            Alignment.BottomLeft => new Vector2(0f, _font.MeasureString(_text).Y),
+            Alignment.BottomCenter => new Vector2(_font.MeasureString(_text).X / 2, _font.MeasureString(_text).Y),
+            Alignment.BottomRight => new Vector2(_font.MeasureString(_text).X, _font.MeasureString(_text).Y),
             _ => Vector2.Zero
         };
     }
 
     public override void Draw(GameTime gameTime)
     {
-        SpriteBatch _spriteBatch = Game.Services.GetService<SpriteBatch>();
-        _spriteBatch.DrawString
+        SpriteBatch spriteBatch = Game.Services.GetService<SpriteBatch>();
+        spriteBatch.DrawString
         (
-            font,
+            _font,
             Text,
             Position * TheLightbulb.Configs.PartialScale,
             Color * Opacity,
             _rotation,
-            pivot,
+            _pivot,
             Scale * TheLightbulb.Configs.PartialScale,
             SpriteEffects.None,
             DrawOrder * 0.1f
