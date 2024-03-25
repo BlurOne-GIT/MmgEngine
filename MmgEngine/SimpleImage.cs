@@ -42,13 +42,13 @@ public class SimpleImage : DrawableGameComponent
             _pivot = _anchor switch
             {
                 Alignment.TopLeft => Vector2.Zero,
-                Alignment.TopCenter => new Vector2(Texture.Width / 2, 0f),
+                Alignment.TopCenter => new Vector2(Texture.Width / 2f, 0f),
                 Alignment.TopRight => new Vector2(Texture.Width, 0f),
-                Alignment.CenterLeft => new Vector2(0f, Texture.Height / 2),
-                Alignment.Center => new Vector2(Texture.Width / 2, Texture.Height / 2),
-                Alignment.CenterRight => new Vector2(Texture.Width, Texture.Height / 2),
+                Alignment.CenterLeft => new Vector2(0f, Texture.Height / 2f),
+                Alignment.Center => new Vector2(Texture.Width / 2f, Texture.Height / 2f),
+                Alignment.CenterRight => new Vector2(Texture.Width, Texture.Height / 2f),
                 Alignment.BottomLeft => new Vector2(0f, Texture.Height),
-                Alignment.BottomCenter => new Vector2(Texture.Width / 2, Texture.Height),
+                Alignment.BottomCenter => new Vector2(Texture.Width / 2f, Texture.Height),
                 Alignment.BottomRight => new Vector2(Texture.Width, Texture.Height),
                 _ => Vector2.Zero
             };
@@ -56,13 +56,13 @@ public class SimpleImage : DrawableGameComponent
             _pivot = _anchor switch
             {
                 Alignment.TopLeft => Vector2.Zero,
-                Alignment.TopCenter => new Vector2(Animation.CurrentFrame().Width / 2, 0f),
+                Alignment.TopCenter => new Vector2(Animation.CurrentFrame().Width / 2f, 0f),
                 Alignment.TopRight => new Vector2(Animation.CurrentFrame().Width, 0f),
-                Alignment.CenterLeft => new Vector2(0f, Animation.CurrentFrame().Height / 2),
-                Alignment.Center => new Vector2(Animation.CurrentFrame().Width / 2, Animation.CurrentFrame().Height / 2),
-                Alignment.CenterRight => new Vector2(Animation.CurrentFrame().Width, Animation.CurrentFrame().Height / 2),
+                Alignment.CenterLeft => new Vector2(0f, Animation.CurrentFrame().Height / 2f),
+                Alignment.Center => new Vector2(Animation.CurrentFrame().Width / 2f, Animation.CurrentFrame().Height / 2f),
+                Alignment.CenterRight => new Vector2(Animation.CurrentFrame().Width, Animation.CurrentFrame().Height / 2f),
                 Alignment.BottomLeft => new Vector2(0f, Animation.CurrentFrame().Height),
-                Alignment.BottomCenter => new Vector2(Animation.CurrentFrame().Width / 2, Animation.CurrentFrame().Height),
+                Alignment.BottomCenter => new Vector2(Animation.CurrentFrame().Width / 2f, Animation.CurrentFrame().Height),
                 Alignment.BottomRight => new Vector2(Animation.CurrentFrame().Width, Animation.CurrentFrame().Height),
                 _ => Vector2.Zero
             };
