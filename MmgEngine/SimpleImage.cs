@@ -23,13 +23,13 @@ public class SimpleImage : DrawableGameComponent
 
     public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.Center, Animation<Rectangle> animation = null, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
     {
-        this.Texture = texture;
+        Texture = texture;
         Position = position;
-        this.DrawOrder = layer;
-        this.Visible = visible;
-        this._anchor = anchor;
+        DrawOrder = layer;
+        Visible = visible;
+        _anchor = anchor;
         Animation = animation;
-        this.Color = color ?? Color.White;
+        Color = color ?? Color.White;
         Opacity = opacity;
         Rotation = rotation;
         Scale = scale;
@@ -70,7 +70,7 @@ public class SimpleImage : DrawableGameComponent
 
     public override void Draw(GameTime gameTime)
     {
-        SpriteBatch spriteBatch = Game.Services.GetService<SpriteBatch>();
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Draw(
             Texture,
             Position * TheLightbulb.Configs.PartialScale,

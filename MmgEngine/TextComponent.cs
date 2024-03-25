@@ -56,7 +56,7 @@ public class TextComponent : DrawableGameComponent
 
     public override void Draw(GameTime gameTime)
     {
-        SpriteBatch spriteBatch = Game.Services.GetService<SpriteBatch>();
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.DrawString
         (
             _font,

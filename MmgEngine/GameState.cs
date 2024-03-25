@@ -15,12 +15,12 @@ public abstract class GameState : DrawableGameComponent
     {
         Input.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
-        foreach (GameComponent gameObject in _components)
+        foreach (GameComponent gameObject in Components)
             gameObject.Dispose();
 
         base.Dispose();
     }
-    protected readonly GameComponentCollection _components = new();
+    protected readonly GameComponentCollection Components = new();
     public virtual void HandleInput(object s, ButtonEventArgs e) {}
     public virtual void HandleInput(object s, InputKeyEventArgs e) {}
     public event EventHandler<GameState> OnStateSwitched;
@@ -32,12 +32,12 @@ public abstract class GameState : DrawableGameComponent
     }
     public override void Update(GameTime gameTime)
     {
-        foreach (GameComponent gameObject in _components.OrderBy(a => (a as GameComponent)!.UpdateOrder))
+        foreach (GameComponent gameObject in Components.OrderBy(a => (a as GameComponent)!.UpdateOrder))
             if (gameObject.Enabled) gameObject.Update(gameTime);
     }
     public override void Draw(GameTime gameTime)
     {
-        var c = _components.Where(a => a is DrawableGameComponent && ((DrawableGameComponent)a).Visible).OrderBy(a => (a as DrawableGameComponent)!.DrawOrder);
+        var c = Components.Where(a => a is DrawableGameComponent { Visible: true }).OrderBy(a => (a as DrawableGameComponent)!.DrawOrder);
         foreach (DrawableGameComponent gameObject in c)
             gameObject.Draw(gameTime);
     }

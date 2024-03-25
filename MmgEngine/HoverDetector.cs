@@ -37,19 +37,15 @@ public class HoverDetector : GameComponent
 
         if (ActionBox.Contains(Input.MousePoint))
         {
-            if (!Hovering)
-            {
-                Hovering = true;
-                Hovered?.Invoke(this, EventArgs.Empty);
-            }
+            if (Hovering) return;
+            Hovering = true;
+            Hovered?.Invoke(this, EventArgs.Empty);
         }
         else
         {
-            if (Hovering)
-            {
-                Hovering = false;
-                Unhovered?.Invoke(this, EventArgs.Empty);
-            }
+            if (!Hovering) return;
+            Hovering = false;
+            Unhovered?.Invoke(this, EventArgs.Empty);
         }
     }
 }
