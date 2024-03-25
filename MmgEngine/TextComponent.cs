@@ -37,22 +37,7 @@ public class TextComponent : DrawableGameComponent
         Text = defaultText;
     }
 
-    private void RelocatePivot()
-    {
-        _pivot = _anchor switch
-        {
-            Alignment.TopLeft => Vector2.Zero,
-            Alignment.TopCenter => new Vector2(_font.MeasureString(_text).X / 2, 0f),
-            Alignment.TopRight => new Vector2(_font.MeasureString(_text).X, 0f),
-            Alignment.CenterLeft => new Vector2(0f, _font.MeasureString(_text).Y / 2),
-            Alignment.Center => new Vector2(_font.MeasureString(_text).X / 2, _font.MeasureString(_text).Y / 2),
-            Alignment.CenterRight => new Vector2(_font.MeasureString(_text).X, _font.MeasureString(_text).Y / 2),
-            Alignment.BottomLeft => new Vector2(0f, _font.MeasureString(_text).Y),
-            Alignment.BottomCenter => new Vector2(_font.MeasureString(_text).X / 2, _font.MeasureString(_text).Y),
-            Alignment.BottomRight => new Vector2(_font.MeasureString(_text).X, _font.MeasureString(_text).Y),
-            _ => Vector2.Zero
-        };
-    }
+    private void RelocatePivot() => _pivot = _font.MeasureString(_text) * EngineStatics.Aligner(_anchor);
 
     public override void Draw(GameTime gameTime)
     {

@@ -37,35 +37,9 @@ public class SimpleImage : DrawableGameComponent
     }
 
     private void RelocatePivot()
-    {   
-        if (Animation is null)
-            _pivot = _anchor switch
-            {
-                Alignment.TopLeft => Vector2.Zero,
-                Alignment.TopCenter => new Vector2(Texture.Width / 2f, 0f),
-                Alignment.TopRight => new Vector2(Texture.Width, 0f),
-                Alignment.CenterLeft => new Vector2(0f, Texture.Height / 2f),
-                Alignment.Center => new Vector2(Texture.Width / 2f, Texture.Height / 2f),
-                Alignment.CenterRight => new Vector2(Texture.Width, Texture.Height / 2f),
-                Alignment.BottomLeft => new Vector2(0f, Texture.Height),
-                Alignment.BottomCenter => new Vector2(Texture.Width / 2f, Texture.Height),
-                Alignment.BottomRight => new Vector2(Texture.Width, Texture.Height),
-                _ => Vector2.Zero
-            };
-        else
-            _pivot = _anchor switch
-            {
-                Alignment.TopLeft => Vector2.Zero,
-                Alignment.TopCenter => new Vector2(Animation.CurrentFrame().Width / 2f, 0f),
-                Alignment.TopRight => new Vector2(Animation.CurrentFrame().Width, 0f),
-                Alignment.CenterLeft => new Vector2(0f, Animation.CurrentFrame().Height / 2f),
-                Alignment.Center => new Vector2(Animation.CurrentFrame().Width / 2f, Animation.CurrentFrame().Height / 2f),
-                Alignment.CenterRight => new Vector2(Animation.CurrentFrame().Width, Animation.CurrentFrame().Height / 2f),
-                Alignment.BottomLeft => new Vector2(0f, Animation.CurrentFrame().Height),
-                Alignment.BottomCenter => new Vector2(Animation.CurrentFrame().Width / 2f, Animation.CurrentFrame().Height),
-                Alignment.BottomRight => new Vector2(Animation.CurrentFrame().Width, Animation.CurrentFrame().Height),
-                _ => Vector2.Zero
-            };
+    {
+        var frame = Animation?.CurrentFrame() ?? Texture.Bounds;
+        _pivot = frame.Size.ToVector2() * EngineStatics.Aligner(_anchor);
     }
 
     public override void Draw(GameTime gameTime)
@@ -102,17 +76,4 @@ public class SimpleImage : DrawableGameComponent
         Animation = animation;
         RelocatePivot();
     }
-}
-
-public enum Alignment
-{
-    TopLeft,
-    TopCenter,
-    TopRight,
-    CenterLeft,
-    Center,
-    CenterRight,
-    BottomLeft,
-    BottomCenter,
-    BottomRight
 }
