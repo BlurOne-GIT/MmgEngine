@@ -61,11 +61,11 @@ public class TextComponent : DrawableGameComponent
         (
             _font,
             Text,
-            Position * TheLightbulb.Configs.PartialScale,
+            Position * EngineStatics.PartialScale,
             Color * Opacity,
             _rotation,
             _pivot,
-            Scale * TheLightbulb.Configs.PartialScale,
+            Scale * EngineStatics.PartialScale,
             SpriteEffects.None,
             DrawOrder * 0.1f
         );

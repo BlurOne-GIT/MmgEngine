@@ -26,7 +26,12 @@ public class HoverDetector : GameComponent
             _ => actionBox.Location
         };
 
-        ActionBox = new Rectangle((int)(actionBox.X * TheLightbulb.Configs.PartialScale), (int)(actionBox.Y * TheLightbulb.Configs.PartialScale), (int)(actionBox.Width * TheLightbulb.Configs.PartialScale), (int)(actionBox.Height * TheLightbulb.Configs.PartialScale));
+        ActionBox = new Rectangle(
+            (int)(actionBox.X * EngineStatics.PartialScale),
+            (int)(actionBox.Y * EngineStatics.PartialScale),
+            (int)(actionBox.Width * EngineStatics.PartialScale),
+            (int)(actionBox.Height * EngineStatics.PartialScale)
+        );
         Enabled = enabled;
     }
 
