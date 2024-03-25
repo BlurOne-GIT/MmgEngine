@@ -2,13 +2,13 @@ namespace MmgEngine;
 
 public enum Alignment : byte
 {
-    TopLeft = 00,
-    TopCenter = 01,
-    TopRight = 02,
-    CenterLeft = 10,
-    Center = 11,
-    CenterRight = 12,
-    BottomLeft = 20,
-    BottomCenter = 21,
-    BottomRight = 22
+    TopLeft = 0b_0000,
+    TopCenter = 0b_0001,
+    TopRight = 0b_0010,
+    CenterLeft = 0b_0100,
+    Center = 0b_0101,
+    CenterRight = 0b_0110,
+    BottomLeft = 0b_1000,
+    BottomCenter = 0b_1001,
+    BottomRight = 0b_1010
 }
