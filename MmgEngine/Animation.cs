@@ -9,18 +9,18 @@ public class Animation<T>
     public T[] Frames { get; }
     public int Position { get; set; }
     private int _frameDelay;
-    private readonly bool _isLooped;
-    private readonly int _frameDuration;
+    public bool IsLooped { get; set; }
+    public int FrameDuration { get; set; }
     public bool Paused { get; set; } = false;
     #endregion
 
     public Animation(T[] frames, bool looped, int frameDuration = 1)
     {
         Frames = frames;
-        _isLooped = looped;
+        IsLooped = looped;
         Position = Frames.Length - 1;
-        _frameDuration = frameDuration - 1;
-        _frameDelay = _frameDuration;
+        FrameDuration = frameDuration - 1;
+        _frameDelay = FrameDuration;
     }
 
     public void Start() => Position = 0;
@@ -31,7 +31,7 @@ public class Animation<T>
             return CurrentFrame();
 
         if (Position >= Frames.Length)
-            if (_isLooped)
+            if (IsLooped)
                 Position = 0;
             else
                 return Frames[Position-1];
@@ -39,7 +39,7 @@ public class Animation<T>
         if (--_frameDelay > 0)
             return Frames[Position];
 
-        _frameDelay = _frameDuration;
+        _frameDelay = FrameDuration;
 
         return Frames[Paused ? Position : Position++];
     }
