@@ -55,9 +55,7 @@ public static class Input
     public static void UpdateInputs(KeyboardState keyboardState)
     {
         for (int i = 0; i < 255; i++)
-        {
             CheckInput(i, keyboardState.IsKeyDown((Keys)i));
-        }
     }
 
     private static void CheckInput(ref bool button, bool value, [CallerMemberName] string name = null)
@@ -68,10 +66,8 @@ public static class Input
         button = value;
         if (!EngineStatics.WindowFocused || MousePoint.X < 0 || MousePoint.Y < 0 || MousePoint.X > 800 || MousePoint.Y > 800)
             return;
-        if (value)
-            ButtonDown?.Invoke(null, new ButtonEventArgs(name, _position));
-        else
-            ButtonUp?.Invoke(null, new ButtonEventArgs(name, _position));
+        
+        (value ? ButtonDown : ButtonUp)?.Invoke(null, new ButtonEventArgs(name, _position));
     }
     private static void CheckInput(int i, bool value)
     {
@@ -81,10 +77,8 @@ public static class Input
         _keys[i] = value;
         if (!EngineStatics.WindowFocused)
             return;
-        if (value)
-            KeyDown?.Invoke(null, new InputKeyEventArgs((Keys)i));
-        else
-            KeyUp?.Invoke(null, new InputKeyEventArgs((Keys)i));
+        
+        (value ? KeyDown : KeyUp)?.Invoke(null, new InputKeyEventArgs((Keys)i));
     }
     #endregion
 }
