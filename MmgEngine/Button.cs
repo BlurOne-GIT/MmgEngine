@@ -22,20 +22,8 @@ public class Button : DrawableGameComponent
     //Constructor
     public Button(Game game, Rectangle actionBox, SimpleImage texture = null, Alignment anchor = Alignment.Center, bool enabled = true, bool hasHover = false) : base(game)
     {
-        actionBox.Location = anchor switch
-        {
-            Alignment.TopLeft => actionBox.Location,
-            Alignment.TopCenter => actionBox.Location - new Point(actionBox.Width / 2, 0),
-            Alignment.TopRight => actionBox.Location - new Point(actionBox.Width, 0),
-            Alignment.CenterLeft => actionBox.Location - new Point(0, actionBox.Height / 2),
-            Alignment.Center => actionBox.Location - new Point(actionBox.Width / 2, actionBox.Height / 2),
-            Alignment.CenterRight => actionBox.Location - new Point(actionBox.Width, actionBox.Height / 2),
-            Alignment.BottomLeft => actionBox.Location - new Point(0, actionBox.Height),
-            Alignment.BottomCenter => actionBox.Location - new Point(actionBox.Width / 2, actionBox.Height),
-            Alignment.BottomRight => actionBox.Location - new Point(actionBox.Width, actionBox.Height),
-            _ => actionBox.Location
-        };
-
+        actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(anchor)).ToPoint();
+        
         if (hasHover)
             HoverDetector = new HoverDetector(game, actionBox, Alignment.TopLeft);
         
