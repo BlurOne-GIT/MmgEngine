@@ -55,29 +55,26 @@ public class Button : DrawableGameComponent
 
     private void Check(object s, ButtonEventArgs e)
     {
-        if (!Enabled)
+        if (!Enabled || !ActionBox.Contains(e.Position))
             return;
-
-        if (ActionBox.Contains(e.Position))
+        
+        switch (e.Button)
         {
-            switch (e.Button)
-            {
-                case "LeftButton":
-                    LeftClicked?.Invoke(this, new EventArgs());
-                    break;
-                case "MiddleButton":
-                    MiddleClicked?.Invoke(this, new EventArgs());
-                    break;
-                case "RightButton":
-                    RightClicked?.Invoke(this, new EventArgs());
-                    break;
-                case "XButton1":
-                    XButton1Clicked?.Invoke(this, new EventArgs());
-                    break;
-                case "XButton2":
-                    XButton2Clicked?.Invoke(this, new EventArgs());
-                    break;
-            }
+            case "LeftButton":
+                LeftClicked?.Invoke(this, EventArgs.Empty);
+                break;
+            case "MiddleButton":
+                MiddleClicked?.Invoke(this, EventArgs.Empty);
+                break;
+            case "RightButton":
+                RightClicked?.Invoke(this, EventArgs.Empty);
+                break;
+            case "XButton1":
+                XButton1Clicked?.Invoke(this, EventArgs.Empty);
+                break;
+            case "XButton2":
+                XButton2Clicked?.Invoke(this, EventArgs.Empty);
+                break;
         }
     }
 
