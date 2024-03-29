@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -7,11 +8,24 @@ public class Animation<T>
 {
     #region Fields
     public T[] Frames { get; }
-    public int Position { get; set; }
+    public int Length => Frames.Length;
+    private int _position;
+    public int Position
+    {
+        get => _position;
+        set
+        {
+            _eventFired = false;
+            _position = value;
+        }
+    }
     private int _frameDelay;
     public bool IsLooped { get; set; }
     public int FrameDuration { get; set; }
     public bool Paused { get; set; } = false;
+    public bool IsAtEnd => Position >= Length;
+    private bool _eventFired;
+    public event EventHandler AnimationReachedEnd;
     #endregion
 
     public Animation(T[] frames, bool looped, int frameDuration = 1)
@@ -31,10 +45,18 @@ public class Animation<T>
             return CurrentFrame();
 
         if (Position >= Frames.Length)
+        {
+            if (!_eventFired)
+            {
+                AnimationReachedEnd?.Invoke(this, EventArgs.Empty);
+                _eventFired = true;
+            }
+            
             if (IsLooped)
                 Position = 0;
             else
                 return Frames[Position-1];
+        }
 
         if (--_frameDelay > 0)
             return Frames[Position];
