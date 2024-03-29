@@ -20,7 +20,7 @@ public class Button : DrawableGameComponent
     #endregion
 
     //Constructor
-    public Button(Game game, Rectangle actionBox, SimpleImage texture = null, Alignment anchor = Alignment.Center, bool enabled = true, bool hasHover = false) : base(game)
+    public Button(Game game, Rectangle actionBox, SimpleImage texture = null, Alignment anchor = Alignment.TopLeft, bool enabled = true, bool hasHover = false) : base(game)
     {
         actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(anchor)).ToPoint();
         

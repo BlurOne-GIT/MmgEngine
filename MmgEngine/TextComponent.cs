@@ -23,7 +23,7 @@ public class TextComponent : DrawableGameComponent
 
     #endregion
 
-    public TextComponent(Game game, SpriteFont font, string defaultText, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.CenterLeft, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
+    public TextComponent(Game game, SpriteFont font, string defaultText, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.TopLeft, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
     {
         _font = font;
         Position = position;

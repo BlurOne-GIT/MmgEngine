@@ -10,7 +10,7 @@ public class HoverDetector : GameComponent
     public Rectangle ActionBox { get; private set; }
     public bool Hovering { get; private set; }
 
-    public HoverDetector(Game game, Rectangle actionBox, Alignment alignment = Alignment.Center, bool enabled = true) : base(game)
+    public HoverDetector(Game game, Rectangle actionBox, Alignment alignment = Alignment.TopLeft, bool enabled = true) : base(game)
     {
         actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(alignment)).ToPoint();
         
