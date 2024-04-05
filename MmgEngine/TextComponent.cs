@@ -15,26 +15,21 @@ public class TextComponent : DrawableGameComponent
 
     #region Properties
     public Vector2 Position { get; set; }
-    public Color Color { get; set; }
-    public float Opacity { get; set; }
+    public Color Color { get; set; } = Color.White;
+    public float Opacity { get; set; } = 1f;
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
-    public float Scale { get; set; }
+    public float Scale { get; set; } = 1f;
     public string Text { get => _text; set {_text = value; RelocatePivot();} }
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
 
     #endregion
 
-    public TextComponent(Game game, SpriteFont font, string defaultText, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.TopLeft, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
+    public TextComponent(Game game, SpriteFont font, string defaultText, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft) : base(game)
     {
         _font = font;
         Position = position;
         DrawOrder = layer;
-        Visible = visible;
         _anchor = anchor;
-        Color = color ?? Color.White;
-        Opacity = opacity;
-        Rotation = rotation;
-        Scale = scale;
         Text = defaultText;
     }
 

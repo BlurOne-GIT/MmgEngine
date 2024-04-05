@@ -15,25 +15,20 @@ public class SimpleImage : DrawableGameComponent
     #region Properties
     public Vector2 Position { get; set; }
     public Animation<Rectangle> Animation { get; private set; }
-    public Color Color { get; set; }
-    public float Opacity { get; set; }
+    public Color Color { get; set; } = Color.White;
+    public float Opacity { get; set; } = 1f;
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
-    public float Scale { get; set; }
+    public float Scale { get; set; } = 1f;
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
     #endregion
 
-    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.TopLeft, Animation<Rectangle> animation = null, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
+    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft, Animation<Rectangle> animation = null) : base(game)
     {
         Texture = texture;
         Position = position;
         DrawOrder = layer;
-        Visible = visible;
         _anchor = anchor;
         Animation = animation;
-        Color = color ?? Color.White;
-        Opacity = opacity;
-        Rotation = rotation;
-        Scale = scale;
         RelocatePivot();
     }
 
