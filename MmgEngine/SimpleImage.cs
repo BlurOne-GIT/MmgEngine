@@ -19,6 +19,7 @@ public class SimpleImage : DrawableGameComponent
     public float Opacity { get; set; }
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
     public float Scale { get; set; }
+    public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
     #endregion
 
     public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.TopLeft, Animation<Rectangle> animation = null, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
@@ -52,8 +53,8 @@ public class SimpleImage : DrawableGameComponent
             Color * Opacity,
             _rotation,
             _pivot,
-            SpriteEffects.None,
             Scale,
+            SpriteEffects,
             DrawOrder * 0.1f
         );
     }

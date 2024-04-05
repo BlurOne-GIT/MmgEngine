@@ -20,6 +20,7 @@ public class TextComponent : DrawableGameComponent
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
     public float Scale { get; set; }
     public string Text { get => _text; set {_text = value; RelocatePivot();} }
+    public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
 
     #endregion
 
@@ -50,8 +51,8 @@ public class TextComponent : DrawableGameComponent
             Color * Opacity,
             _rotation,
             _pivot,
-            SpriteEffects.None,
             Scale,
+            SpriteEffects,
             DrawOrder * 0.1f
         );
     }
