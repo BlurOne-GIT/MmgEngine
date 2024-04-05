@@ -46,12 +46,12 @@ public class TextComponent : DrawableGameComponent
         (
             _font,
             Text,
-            Position * EngineStatics.PartialScale,
+            Position,
             Color * Opacity,
             _rotation,
             _pivot,
-            Scale * EngineStatics.PartialScale,
             SpriteEffects.None,
+            Scale,
             DrawOrder * 0.1f
         );
     }

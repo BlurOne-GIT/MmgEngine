@@ -47,13 +47,13 @@ public class SimpleImage : DrawableGameComponent
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Draw(
             Texture,
-            Position * EngineStatics.PartialScale,
+            Position,
             Animation?.NextFrame(),
             Color * Opacity,
             _rotation,
             _pivot,
-            Scale * EngineStatics.PartialScale,
             SpriteEffects.None,
+            Scale,
             DrawOrder * 0.1f
         );
     }
