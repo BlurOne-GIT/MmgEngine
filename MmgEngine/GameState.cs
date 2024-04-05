@@ -8,13 +8,13 @@ public abstract class GameState : DrawableGameComponent
 {
     public GameState(Game game) : base(game)
     {
-        Input.KeyDown += HandleInput;
+        Game.Window.KeyDown += HandleInput;
         Input.ButtonDown += HandleInput;
     }
     
     public new virtual void Dispose()
     {
-        Input.KeyDown -= HandleInput;
+        Game.Window.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
         foreach (GameComponent gameObject in Components)
             gameObject.Dispose();

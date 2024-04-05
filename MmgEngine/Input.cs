@@ -17,9 +17,6 @@ public static class Input
     #region Events
     public static event EventHandler<ButtonEventArgs> ButtonDown;
     public static event EventHandler<ButtonEventArgs> ButtonUp;
-
-    public static event EventHandler<InputKeyEventArgs> KeyDown;
-    public static event EventHandler<InputKeyEventArgs> KeyUp;
     #endregion
 
     #region Fields
@@ -35,15 +32,15 @@ public static class Input
     #region Properties
     public static bool ShowCursor { get; set; }
     public static Point MousePoint { get; set; }
-    private static bool LeftButton { set => CheckInput(ref _leftButton, value); }
-    private static bool MiddleButton { set => CheckInput(ref _middleButton, value); }
-    private static bool RightButton { set => CheckInput(ref _rightButton, value); }
-    private static bool XButton1 { set => CheckInput(ref _xButton1, value); }
-    private static bool XButton2 { set => CheckInput(ref _xButton2, value); }
+    private static bool LeftButton { set => CheckMouseInput(ref _leftButton, value); }
+    private static bool MiddleButton { set => CheckMouseInput(ref _middleButton, value); }
+    private static bool RightButton { set => CheckMouseInput(ref _rightButton, value); }
+    private static bool XButton1 { set => CheckMouseInput(ref _xButton1, value); }
+    private static bool XButton2 { set => CheckMouseInput(ref _xButton2, value); }
     #endregion
 
     #region Methods
-    public static void UpdateInputs(MouseState mouseState)
+    public static void UpdateMouseInput(MouseState mouseState)
     {
         LeftButton = Convert.ToBoolean(mouseState.LeftButton);
         MiddleButton = Convert.ToBoolean(mouseState.MiddleButton);
@@ -52,13 +49,14 @@ public static class Input
         XButton2 = Convert.ToBoolean(mouseState.XButton2);
         _position = mouseState.Position;
     }
-    public static void UpdateInputs(KeyboardState keyboardState)
-    {
-        for (int i = 0; i < 255; i++)
-            CheckInput(i, keyboardState.IsKeyDown((Keys)i));
-    }
 
-    private static void CheckInput(ref bool button, bool value, [CallerMemberName] string name = null)
+    public static void StoreKeyDown(object s, InputKeyEventArgs e)
+        => _keys[(int)e.Key] = true;
+    
+    public static void StoreKeyUp(object s, InputKeyEventArgs e)
+        => _keys[(int)e.Key] = false;
+
+    private static void CheckMouseInput(ref bool button, bool value, [CallerMemberName] string name = null)
     {
         if (button == value)
             return;
@@ -68,17 +66,6 @@ public static class Input
             return;
         
         (value ? ButtonDown : ButtonUp)?.Invoke(null, new ButtonEventArgs(name, _position));
-    }
-    private static void CheckInput(int i, bool value)
-    {
-        if (_keys[i] == value)
-            return;
-
-        _keys[i] = value;
-        if (!EngineStatics.WindowFocused)
-            return;
-        
-        (value ? KeyDown : KeyUp)?.Invoke(null, new InputKeyEventArgs((Keys)i));
     }
     #endregion
 }
