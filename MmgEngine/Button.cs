@@ -108,12 +108,13 @@ public class Button : DrawableGameComponent
             (_actionBox.Size.ToVector2() * EngineStatics.Scale).ToPoint()
         );
     }
-    
-    public new void Dispose()
+
+    protected override void Dispose(bool disposing)
     {
-        //Configs.ResolutionChanged -= ResetRectangle;
         Input.ButtonDown -= Check;
-        base.Dispose();
+        EngineStatics.ViewportChanged -= UpdateActionBox;
+        HoverDetector?.Dispose();
+        base.Dispose(disposing);
     }
     #endregion
 }

@@ -18,7 +18,8 @@ public abstract class GameState : DrawableGameComponent
         Input.ButtonDown -= HandleInput;
         foreach (GameComponent gameObject in Components)
             gameObject.Dispose();
-
+        
+        Components.Clear();
         base.Dispose();
     }
     

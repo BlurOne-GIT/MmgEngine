@@ -65,4 +65,10 @@ public class HoverDetector : GameComponent
             Unhovered?.Invoke(this, EventArgs.Empty);
         }
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        EngineStatics.ViewportChanged -= UpdateActionBox;
+        base.Dispose(disposing);
+    }
 }
