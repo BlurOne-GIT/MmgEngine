@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Rectangle that emits events when the mouse is hovering over it.
+/// </summary>
 public class HoverDetector : GameComponent
 {
     public event EventHandler Hovered;

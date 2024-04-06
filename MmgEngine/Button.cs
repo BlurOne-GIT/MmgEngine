@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace MmgEngine;
 
+/// <summary>
+/// A rectangle that emits events when clicking on it. Can have a <see cref="SimpleImage"/> and a <see cref="HoverDetector"/>.
+/// </summary>
 public class Button : DrawableGameComponent
 {
     #region Events

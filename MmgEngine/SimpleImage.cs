@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Simple image that draws a <see cref="Texture2D"/> on the screen.
+/// </summary>
 public class SimpleImage : DrawableGameComponent
 {
     #region Fields

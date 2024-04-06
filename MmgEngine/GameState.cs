@@ -25,9 +25,15 @@ public abstract class GameState : DrawableGameComponent
     
     protected readonly GameComponentCollection Components = new();
     
-    public virtual void HandleInput(object s, ButtonEventArgs e) {}
+    /// <summary>
+    /// Handle button clicks.
+    /// </summary>
+    public virtual void HandleInput(object sender, ButtonEventArgs eventArgs) {}
     
-    public virtual void HandleInput(object s, InputKeyEventArgs e) {}
+    /// <summary>
+    /// Handle key presses.
+    /// </summary>
+    public virtual void HandleInput(object sender, InputKeyEventArgs eventArgs) {}
     
     public event EventHandler<GameState> OnStateSwitched;
     
@@ -35,6 +41,10 @@ public abstract class GameState : DrawableGameComponent
     
     public new abstract void UnloadContent();
     
+    /// <summary>
+    /// Change the current game state.
+    /// </summary>
+    /// <param name="gameState">New game state.</param>
     protected void SwitchState(GameState gameState) => OnStateSwitched?.Invoke(this, gameState);
 
     public override void Update(GameTime gameTime)

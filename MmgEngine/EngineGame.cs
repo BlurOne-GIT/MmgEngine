@@ -4,6 +4,10 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Abstract class that extends <see cref="Game"/> with the engine's features.
+/// Inheritance is not required, but it is recommended to use the engine's features.
+/// </summary>
 public abstract class EngineGame : Game
 {
     protected GraphicsDeviceManager Graphics;
@@ -33,6 +37,11 @@ public abstract class EngineGame : Game
         // TODO: use this.Content to load your game content here
     }
 
+    /// <summary>
+    /// Call this method to switch the current game state.
+    /// Also called by <see cref="GameState.OnStateSwitched"/>.
+    /// </summary>
+    /// <param name="newGameState">New game state.</param>
     protected void SwitchGameState(GameState newGameState)
     {
         if (CurrentGameState is not null)
@@ -53,8 +62,6 @@ public abstract class EngineGame : Game
     private void OnStateSwitched(object s, GameState e) => SwitchGameState(e);
     
     private void OnViewportChanged(object s, EventArgs e)
-    {
-        ViewportMatrix = Matrix.CreateScale(EngineStatics.Scale.X, EngineStatics.Scale.Y, 1) *
-                         Matrix.CreateTranslation(EngineStatics.Offset.X, EngineStatics.Offset.Y, 0);
-    }
+        => ViewportMatrix = Matrix.CreateScale(EngineStatics.Scale.X, EngineStatics.Scale.Y, 1) * 
+                            Matrix.CreateTranslation(EngineStatics.Offset.X, EngineStatics.Offset.Y, 0);
 }

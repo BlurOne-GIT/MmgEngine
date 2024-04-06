@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Text component that can be drawn on the screen.
+/// </summary>
 public class TextComponent : DrawableGameComponent
 {
     #region Fields

@@ -4,6 +4,9 @@ using Microsoft.Xna.Framework;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Frame-functioned list.
+/// </summary>
 public class Animation<T>
 {
     #region Fields
@@ -37,8 +40,14 @@ public class Animation<T>
         _frameDelay = FrameDuration;
     }
 
+    /// <summary>
+    /// Set the position to the first frame.
+    /// </summary>
     public void Start() => Position = 0;
 
+    /// <summary>
+    /// Returns current frame and advances the position.
+    /// </summary>
     public T NextFrame()
     {
         if (Paused)
@@ -68,6 +77,10 @@ public class Animation<T>
 
     public T CurrentFrame() => Position < Frames.Length ? Frames[Position] : Frames[Position-1];
 
+    /// <summary>
+    /// Tool for creating a texture animation for tilesheets.
+    /// </summary>
+    /// <returns>Animation of rectangles to be used in a SpriteBatch.Draw while passing the whole tilesheet as the Texture.</returns>
     public static Animation<Rectangle> TextureAnimation(Point frameSize, Point bounds, bool looped, int frameDuration)
     {
         var frames = new List<Rectangle>();

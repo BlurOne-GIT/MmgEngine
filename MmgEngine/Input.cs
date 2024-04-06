@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Input;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Mouse button event arguments. Similar to <see cref="InputKeyEventArgs"/>.
+/// </summary>
 public class ButtonEventArgs : EventArgs
 {
     public ButtonEventArgs(string button, Point position) { Button = button; Position = position; }
@@ -12,6 +15,9 @@ public class ButtonEventArgs : EventArgs
     public Point Position { get; }
 }
 
+/// <summary>
+/// Static class that expands upon <see cref="Microsoft.Xna.Framework.Input"/> to handle mouse and keyboard input with better events and properties.
+/// </summary>
 public static class Input
 {
     #region Events
