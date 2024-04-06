@@ -12,8 +12,7 @@ public static class EngineStatics
     private static Vector2 _scale = Vector2.One;
     private static Vector2 _offset = Vector2.Zero;
     /// <summary>
-    /// Scale to be used by <see cref="EngineGame.ViewportMatrix"/> to Scale the drawn content.
-    /// Also used by <see cref="Button"/> and <see cref="HoverDetector"/> to scale the action box.
+    /// Scale to be used by <see cref="EngineGame.ViewportMatrix"/> to scale the drawn content.
     /// </summary>
     public static Vector2 Scale
     {
@@ -27,7 +26,6 @@ public static class EngineStatics
     /// <summary>
     /// Not affected by <see cref="Scale"/>.
     /// Offset to be used by <see cref="EngineGame.ViewportMatrix"/> to offset the drawn content.
-    /// Also used by <see cref="Button"/> and <see cref="HoverDetector"/> to scale the action box.
     /// </summary>
     public static Vector2 Offset
     {
