@@ -13,17 +13,18 @@ public class HoverDetector : GameComponent
 
     public Vector2 Position
     {
-        get => new(_actionBox.X, _actionBox.Y);
+        get => _actionBox.Location.ToVector2() + _actionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft);
         set => _actionBox.Location = (value - _actionBox.Size.ToVector2() * EngineStatics.Aligner(_alignment)).ToPoint();
     }
 
     public Vector2 Size
     {
-        get => new(_actionBox.Width, _actionBox.Height);
+        get => _actionBox.Size.ToVector2();
         set
         {
+            var oldExternalLocation = Position;
             _actionBox.Size = value.ToPoint();
-            _actionBox.Location -= (_actionBox.Size.ToVector2() * EngineStatics.Aligner(_alignment)).ToPoint();
+            _actionBox.Location = (oldExternalLocation - _actionBox.Size.ToVector2() * EngineStatics.Aligner(_alignment)).ToPoint();
         }
     }
     
@@ -45,7 +46,7 @@ public class HoverDetector : GameComponent
     private void UpdateActionBox(object s, EventArgs e)
     {
         _actionBox = new Rectangle(
-            (_actionBox.Size.ToVector2() * EngineStatics.Scale + EngineStatics.Offset).ToPoint(),
+            (_actionBox.Location.ToVector2() * EngineStatics.Scale + EngineStatics.Offset).ToPoint(),
             (_actionBox.Size.ToVector2() * EngineStatics.Scale).ToPoint()
         );
     }
