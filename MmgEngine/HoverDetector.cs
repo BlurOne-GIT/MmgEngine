@@ -38,9 +38,9 @@ public class HoverDetector : GameComponent
         actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(alignment)).ToPoint();
         _actionBox = actionBox;
         
-        UpdateActionBox(this, EventArgs.Empty);
+        //UpdateActionBox(this, EventArgs.Empty);
         
-        EngineStatics.ViewportChanged += UpdateActionBox;
+        //EngineStatics.ViewportChanged += UpdateActionBox;
     }
 
     private void UpdateActionBox(object s, EventArgs e)

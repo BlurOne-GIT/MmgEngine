@@ -62,8 +62,8 @@ public class Button : DrawableGameComponent
         if (texture is not null)
             DrawOrder = texture.DrawOrder;
 
-        UpdateActionBox(this, EventArgs.Empty);
-        EngineStatics.ViewportChanged += UpdateActionBox;
+        //UpdateActionBox(this, EventArgs.Empty);
+        //EngineStatics.ViewportChanged += UpdateActionBox;
         Input.ButtonDown += Check;
     }
 
