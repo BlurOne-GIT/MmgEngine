@@ -25,13 +25,12 @@ public static class Input
     private static bool _rightButton;
     private static bool _xButton1;
     private static bool _xButton2;
-    private static Point _position;
-    private static bool[] _keys = new bool[255];
     #endregion
 
     #region Properties
     public static bool ShowCursor { get; set; }
-    public static Point MousePoint { get; set; }
+    public static Point MousePoint { get; private set; }
+    public static Game Game { private get; set; }
     private static bool LeftButton { set => CheckMouseInput(ref _leftButton, value); }
     private static bool MiddleButton { set => CheckMouseInput(ref _middleButton, value); }
     private static bool RightButton { set => CheckMouseInput(ref _rightButton, value); }
@@ -47,14 +46,8 @@ public static class Input
         RightButton = Convert.ToBoolean(mouseState.RightButton);
         XButton1 = Convert.ToBoolean(mouseState.XButton1);
         XButton2 = Convert.ToBoolean(mouseState.XButton2);
-        _position = mouseState.Position;
+        MousePoint = mouseState.Position;
     }
-
-    public static void StoreKeyDown(object s, InputKeyEventArgs e)
-        => _keys[(int)e.Key] = true;
-    
-    public static void StoreKeyUp(object s, InputKeyEventArgs e)
-        => _keys[(int)e.Key] = false;
 
     private static void CheckMouseInput(ref bool button, bool value, [CallerMemberName] string name = null)
     {
@@ -62,10 +55,10 @@ public static class Input
             return;
         
         button = value;
-        if (!EngineStatics.WindowFocused || MousePoint.X < 0 || MousePoint.Y < 0 || MousePoint.X > 800 || MousePoint.Y > 800)
+        if (!Game.IsActive || MousePoint.X < 0 || MousePoint.Y < 0 || MousePoint.X > Game.Window.ClientBounds.Size.X || MousePoint.Y > Game.Window.ClientBounds.Size.Y)
             return;
         
-        (value ? ButtonDown : ButtonUp)?.Invoke(null, new ButtonEventArgs(name, _position));
+        (value ? ButtonDown : ButtonUp)?.Invoke(null, new ButtonEventArgs(name, MousePoint));
     }
     #endregion
 }

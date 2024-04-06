@@ -19,13 +19,9 @@ public abstract class EngineGame : Game
 
     protected override void Initialize()
     {
-        Window.KeyDown += Input.StoreKeyDown;
-        Window.KeyUp += Input.StoreKeyUp;
-
-        Activated += EngineStatics.Focus;
-        Deactivated += EngineStatics.UnFocus;
+        Input.Game = this;
+        
         EngineStatics.ViewportChanged += OnViewportChanged;
-        EngineStatics.Focus(null, null);
         base.Initialize();
     }
 
