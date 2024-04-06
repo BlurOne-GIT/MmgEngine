@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Text component that can be drawn on the screen.
+/// </summary>
 public class TextComponent : DrawableGameComponent
 {
     #region Fields
@@ -15,25 +18,21 @@ public class TextComponent : DrawableGameComponent
 
     #region Properties
     public Vector2 Position { get; set; }
-    public Color Color { get; set; }
-    public float Opacity { get; set; }
+    public Color Color { get; set; } = Color.White;
+    public float Opacity { get; set; } = 1f;
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
-    public float Scale { get; set; }
+    public Vector2 Scale { get; set; } = Vector2.One;
     public string Text { get => _text; set {_text = value; RelocatePivot();} }
+    public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
 
     #endregion
 
-    public TextComponent(Game game, SpriteFont font, string defaultText, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.TopLeft, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
+    public TextComponent(Game game, SpriteFont font, string defaultText, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft) : base(game)
     {
         _font = font;
         Position = position;
         DrawOrder = layer;
-        Visible = visible;
         _anchor = anchor;
-        Color = color ?? Color.White;
-        Opacity = opacity;
-        Rotation = rotation;
-        Scale = scale;
         Text = defaultText;
     }
 
@@ -46,12 +45,12 @@ public class TextComponent : DrawableGameComponent
         (
             _font,
             Text,
-            Position * EngineStatics.PartialScale,
+            Position,
             Color * Opacity,
             _rotation,
             _pivot,
-            Scale * EngineStatics.PartialScale,
-            SpriteEffects.None,
+            Scale,
+            SpriteEffects,
             DrawOrder * 0.1f
         );
     }

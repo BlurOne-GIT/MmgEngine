@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MmgEngine;
 
+/// <summary>
+/// Simple image that draws a <see cref="Texture2D"/> on the screen.
+/// </summary>
 public class SimpleImage : DrawableGameComponent
 {
     #region Fields
@@ -15,24 +18,20 @@ public class SimpleImage : DrawableGameComponent
     #region Properties
     public Vector2 Position { get; set; }
     public Animation<Rectangle> Animation { get; private set; }
-    public Color Color { get; set; }
-    public float Opacity { get; set; }
+    public Color Color { get; set; } = Color.White;
+    public float Opacity { get; set; } = 1f;
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
-    public float Scale { get; set; }
+    public Vector2 Scale { get; set; } = Vector2.One;
+    public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
     #endregion
 
-    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, bool visible = true, Alignment anchor = Alignment.TopLeft, Animation<Rectangle> animation = null, Color? color = null, float opacity = 1f, float rotation = 0f, float scale = 1f) : base(game)
+    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft, Animation<Rectangle> animation = null) : base(game)
     {
         Texture = texture;
         Position = position;
         DrawOrder = layer;
-        Visible = visible;
         _anchor = anchor;
         Animation = animation;
-        Color = color ?? Color.White;
-        Opacity = opacity;
-        Rotation = rotation;
-        Scale = scale;
         RelocatePivot();
     }
 
@@ -47,14 +46,36 @@ public class SimpleImage : DrawableGameComponent
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Draw(
             Texture,
-            Position * EngineStatics.PartialScale,
+            Position,
             Animation?.NextFrame(),
             Color * Opacity,
             _rotation,
             _pivot,
-            Scale * EngineStatics.PartialScale,
-            SpriteEffects.None,
+            Scale,
+            SpriteEffects,
             DrawOrder * 0.1f
+        );
+    }
+
+    /// <summary>
+    /// For inheritance purposes.
+    /// Draws another texture based on this image's parameters (can be modified).
+    /// </summary>
+    protected void DrawAnotherTexture(Texture2D texture, Vector2 positionOffset, int drawOrder,
+        Animation<Rectangle> animation = null, float opacityMultiplier = 1f, float rotationOffset = 0f, Vector2 pivot = default, Vector2 scaleMultiplier = default)
+    {
+        if (scaleMultiplier == default) scaleMultiplier = Vector2.One;
+        var spriteBatch = Game.Services.GetService<SpriteBatch>();
+        spriteBatch.Draw(
+            texture,
+            Position + positionOffset,
+            animation?.NextFrame(),
+            Color * Opacity * opacityMultiplier,
+            _rotation + rotationOffset,
+            pivot,
+            Scale * scaleMultiplier,
+            SpriteEffects,
+            drawOrder * 0.1f
         );
     }
 

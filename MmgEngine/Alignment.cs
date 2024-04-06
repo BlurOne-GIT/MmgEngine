@@ -1,5 +1,8 @@
 namespace MmgEngine;
 
+/// <summary>
+/// Alignments for DrawableGameComponents positioning.
+/// </summary>
 public enum Alignment : byte
 {
     TopLeft = 0b_0000,

@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework;
 
 namespace MmgEngine;
 
+/// <summary>
+/// A rectangle that emits events when clicking on it. Can have a <see cref="SimpleImage"/> and a <see cref="HoverDetector"/>.
+/// </summary>
 public class Button : DrawableGameComponent
 {
     #region Events
@@ -16,46 +19,61 @@ public class Button : DrawableGameComponent
     #region Properties
     public SimpleImage Image { get; private set; }
     public HoverDetector HoverDetector { get; private set; }
-    public Rectangle ActionBox { get; private set; }
+    public Vector2 Position
+    {
+        get => _actionBox.Location.ToVector2() + _actionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft);
+        set
+        {
+            _actionBox.Location = (value - _actionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft)).ToPoint();
+            if (HoverDetector != null) HoverDetector.Position = value;
+        }
+    }
+
+    public Vector2 Size
+    {
+        get => _actionBox.Size.ToVector2();
+        set
+        {
+            var oldExternalLocation = Position;
+            _actionBox.Size = value.ToPoint();
+            _actionBox.Location = (oldExternalLocation - _actionBox.Size.ToVector2() * EngineStatics.Aligner(_alignment)).ToPoint();
+            if (HoverDetector != null) HoverDetector.Size = value;
+        }
+    }
+    #endregion
+
+    #region Fields
+    private Rectangle _actionBox;
+    private readonly Alignment _alignment;
     #endregion
 
     //Constructor
-    public Button(Game game, Rectangle actionBox, SimpleImage texture = null, Alignment anchor = Alignment.TopLeft, bool enabled = true, bool hasHover = false) : base(game)
+    public Button(Game game, Rectangle actionBox, SimpleImage texture = null, Alignment alignment = Alignment.TopLeft, bool hasHover = false) : base(game)
     {
-        actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(anchor)).ToPoint();
+        _alignment = alignment;
+        actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(alignment)).ToPoint();
+        _actionBox = actionBox;
         
         if (hasHover)
-            HoverDetector = new HoverDetector(game, actionBox, Alignment.TopLeft);
+            HoverDetector = new HoverDetector(game, actionBox, alignment){Enabled = Enabled};
         
-        ActionBox = new Rectangle(
-            (int)(actionBox.X * EngineStatics.PartialScale),
-            (int)(actionBox.Y * EngineStatics.PartialScale),
-            (int)(actionBox.Width * EngineStatics.PartialScale),
-            (int)(actionBox.Height * EngineStatics.PartialScale)
-        );
         Image = texture;
-        Enabled = enabled;
         Visible = texture is not null;
         if (texture is not null)
             DrawOrder = texture.DrawOrder;
-
-        //ResetRectangle(null, null);
-        //Configs.ResolutionChanged += ResetRectangle;
-        Input.ButtonDown += Check;
         
+        Input.ButtonDown += Check;
     }
 
     #region Methods
-
     public override void Draw(GameTime gameTime) 
     {
-        if (Image.Visible)
-            Image.Draw(gameTime);
+        if (Image.Visible) Image.Draw(gameTime);
     }
 
     private void Check(object s, ButtonEventArgs e)
     {
-        if (!Enabled || !ActionBox.Contains(e.Position))
+        if (!Enabled || !_actionBox.Contains(e.Position))
             return;
         
         switch (e.Button)
@@ -85,13 +103,11 @@ public class Button : DrawableGameComponent
         base.Update(gameTime);
     }
 
-    //private void ResetRectangle(object s, EventArgs e) => rectangle = new Rectangle((int)_position.X * Configs.Scale + Configs.XOffset, (int)_position.Y * Configs.Scale + Configs.YOffset, _size.X * Configs.Scale, _size.Y * Configs.Scale);
-
-    public new void Dispose()
+    protected override void Dispose(bool disposing)
     {
-        //Configs.ResolutionChanged -= ResetRectangle;
         Input.ButtonDown -= Check;
-        base.Dispose();
+        HoverDetector?.Dispose();
+        base.Dispose(disposing);
     }
     #endregion
 }

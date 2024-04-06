@@ -8,25 +8,33 @@ public abstract class GameState : DrawableGameComponent
 {
     public GameState(Game game) : base(game)
     {
-        Input.KeyDown += HandleInput;
+        Game.Window.KeyDown += HandleInput;
         Input.ButtonDown += HandleInput;
+        Components.ComponentAdded += InitializeComponent;
+        Components.ComponentRemoved += DisposeComponent;
     }
-    
-    public new virtual void Dispose()
-    {
-        Input.KeyDown -= HandleInput;
-        Input.ButtonDown -= HandleInput;
-        foreach (GameComponent gameObject in Components)
-            gameObject.Dispose();
 
-        base.Dispose();
+    protected override void Dispose(bool disposing)
+    {
+        Game.Window.KeyDown -= HandleInput;
+        Input.ButtonDown -= HandleInput;
+        Components.ComponentAdded -= InitializeComponent;
+        Components.Clear();
+        Components.ComponentRemoved -= DisposeComponent;
+        base.Dispose(disposing);
     }
     
     protected readonly GameComponentCollection Components = new();
     
-    public virtual void HandleInput(object s, ButtonEventArgs e) {}
+    /// <summary>
+    /// Handle button clicks.
+    /// </summary>
+    public virtual void HandleInput(object sender, ButtonEventArgs eventArgs) {}
     
-    public virtual void HandleInput(object s, InputKeyEventArgs e) {}
+    /// <summary>
+    /// Handle key presses.
+    /// </summary>
+    public virtual void HandleInput(object sender, InputKeyEventArgs eventArgs) {}
     
     public event EventHandler<GameState> OnStateSwitched;
     
@@ -34,6 +42,10 @@ public abstract class GameState : DrawableGameComponent
     
     public new abstract void UnloadContent();
     
+    /// <summary>
+    /// Change the current game state.
+    /// </summary>
+    /// <param name="gameState">New game state.</param>
     protected void SwitchState(GameState gameState) => OnStateSwitched?.Invoke(this, gameState);
 
     public override void Update(GameTime gameTime)
@@ -48,4 +60,12 @@ public abstract class GameState : DrawableGameComponent
         foreach (DrawableGameComponent gameObject in c)
             gameObject.Draw(gameTime);
     }
- }
+
+    private static void InitializeComponent(object s, GameComponentCollectionEventArgs e) => e.GameComponent.Initialize();
+
+    private static void DisposeComponent(object s, GameComponentCollectionEventArgs e)
+    {
+        if (e.GameComponent is IDisposable disposable)
+            disposable.Dispose();
+    }
+}
