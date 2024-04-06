@@ -10,17 +10,18 @@ public abstract class GameState : DrawableGameComponent
     {
         Game.Window.KeyDown += HandleInput;
         Input.ButtonDown += HandleInput;
+        Components.ComponentAdded += InitializeComponent;
+        Components.ComponentRemoved += DisposeComponent;
     }
-    
-    public new virtual void Dispose()
+
+    protected override void Dispose(bool disposing)
     {
         Game.Window.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
-        foreach (GameComponent gameObject in Components)
-            gameObject.Dispose();
-        
+        Components.ComponentAdded -= InitializeComponent;
         Components.Clear();
-        base.Dispose();
+        Components.ComponentRemoved -= DisposeComponent;
+        base.Dispose(disposing);
     }
     
     protected readonly GameComponentCollection Components = new();
@@ -59,4 +60,12 @@ public abstract class GameState : DrawableGameComponent
         foreach (DrawableGameComponent gameObject in c)
             gameObject.Draw(gameTime);
     }
- }
+
+    private static void InitializeComponent(object s, GameComponentCollectionEventArgs e) => e.GameComponent.Initialize();
+
+    private static void DisposeComponent(object s, GameComponentCollectionEventArgs e)
+    {
+        if (e.GameComponent is IDisposable disposable)
+            disposable.Dispose();
+    }
+}
