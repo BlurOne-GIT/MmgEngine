@@ -37,18 +37,6 @@ public class HoverDetector : GameComponent
         _alignment = alignment;
         actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(alignment)).ToPoint();
         _actionBox = actionBox;
-        
-        //UpdateActionBox(this, EventArgs.Empty);
-        
-        //EngineStatics.ViewportChanged += UpdateActionBox;
-    }
-
-    private void UpdateActionBox(object s, EventArgs e)
-    {
-        _actionBox = new Rectangle(
-            (_actionBox.Location.ToVector2() * EngineStatics.Scale + EngineStatics.Offset).ToPoint(),
-            (_actionBox.Size.ToVector2() * EngineStatics.Scale).ToPoint()
-        );
     }
     
     public override void Update(GameTime gameTime)
@@ -68,11 +56,5 @@ public class HoverDetector : GameComponent
             Hovering = false;
             Unhovered?.Invoke(this, EventArgs.Empty);
         }
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        EngineStatics.ViewportChanged -= UpdateActionBox;
-        base.Dispose(disposing);
     }
 }

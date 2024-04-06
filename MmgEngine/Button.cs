@@ -61,9 +61,7 @@ public class Button : DrawableGameComponent
         Visible = texture is not null;
         if (texture is not null)
             DrawOrder = texture.DrawOrder;
-
-        //UpdateActionBox(this, EventArgs.Empty);
-        //EngineStatics.ViewportChanged += UpdateActionBox;
+        
         Input.ButtonDown += Check;
     }
 
@@ -105,18 +103,9 @@ public class Button : DrawableGameComponent
         base.Update(gameTime);
     }
 
-    private void UpdateActionBox(object s, EventArgs e)
-    {
-        _actionBox = new Rectangle(
-            (_actionBox.Location.ToVector2() * EngineStatics.Scale + EngineStatics.Offset).ToPoint(),
-            (_actionBox.Size.ToVector2() * EngineStatics.Scale).ToPoint()
-        );
-    }
-
     protected override void Dispose(bool disposing)
     {
         Input.ButtonDown -= Check;
-        EngineStatics.ViewportChanged -= UpdateActionBox;
         HoverDetector?.Dispose();
         base.Dispose(disposing);
     }
