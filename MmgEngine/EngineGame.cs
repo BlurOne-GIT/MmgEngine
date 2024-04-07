@@ -47,13 +47,14 @@ public abstract class EngineGame : Game
     {
         if (CurrentGameState is not null)
         {
+            Components.Remove(CurrentGameState);
             CurrentGameState.OnStateSwitched -= OnStateSwitched;
             CurrentGameState.Dispose();
         }
 
         CurrentGameState = newGameState;
 
-        CurrentGameState.Initialize();
+        Components.Add(CurrentGameState);
 
         CurrentGameState.OnStateSwitched += OnStateSwitched;
     }
