@@ -10,17 +10,17 @@ public abstract class GameState : DrawableGameComponent
     {
         Game.Window.KeyDown += HandleInput;
         Input.ButtonDown += HandleInput;
-        Components.ComponentAdded += InitializeComponent;
-        Components.ComponentRemoved += DisposeComponent;
+        Components.ComponentAdded += OnComponentAdded;
+        Components.ComponentRemoved += OnComponentRemoved;
     }
 
     protected override void Dispose(bool disposing)
     {
         Game.Window.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
-        Components.ComponentAdded -= InitializeComponent;
+        Components.ComponentAdded -= OnComponentAdded;
         Components.Clear();
-        Components.ComponentRemoved -= DisposeComponent;
+        Components.ComponentRemoved -= OnComponentRemoved;
         base.Dispose(disposing);
     }
     
@@ -48,23 +48,11 @@ public abstract class GameState : DrawableGameComponent
     /// <param name="gameState">New game state.</param>
     protected void SwitchState(GameState gameState) => OnStateSwitched?.Invoke(this, gameState);
 
-    public override void Update(GameTime gameTime)
-    {
-        foreach (GameComponent gameObject in Components.OrderBy(a => (a as GameComponent)!.UpdateOrder))
-            if (gameObject.Enabled) gameObject.Update(gameTime);
-    }
-    
-    public override void Draw(GameTime gameTime)
-    {
-        var c = Components.Where(a => a is DrawableGameComponent { Visible: true }).OrderBy(a => (a as DrawableGameComponent)!.DrawOrder);
-        foreach (DrawableGameComponent gameObject in c)
-            gameObject.Draw(gameTime);
-    }
+    private void OnComponentAdded(object s, GameComponentCollectionEventArgs e) => Game.Components.Add(e.GameComponent);
 
-    private static void InitializeComponent(object s, GameComponentCollectionEventArgs e) => e.GameComponent.Initialize();
-
-    private static void DisposeComponent(object s, GameComponentCollectionEventArgs e)
+    private void OnComponentRemoved(object s, GameComponentCollectionEventArgs e)
     {
+        Game.Components.Remove(e.GameComponent);
         if (e.GameComponent is IDisposable disposable)
             disposable.Dispose();
     }
