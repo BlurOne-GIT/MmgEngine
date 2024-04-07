@@ -43,7 +43,7 @@ public abstract class EngineGame : Game
     /// Also called by <see cref="GameState.OnStateSwitched"/>.
     /// </summary>
     /// <param name="newGameState">New game state.</param>
-    protected void SwitchGameState(GameState newGameState)
+    protected virtual void SwitchGameState(GameState newGameState)
     {
         if (CurrentGameState is not null)
         {
