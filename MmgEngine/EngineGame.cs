@@ -25,6 +25,7 @@ public abstract class EngineGame : Game
     {
         Input.Game = this;
         
+        OnViewportChanged(this, EventArgs.Empty);
         EngineStatics.ViewportChanged += OnViewportChanged;
         base.Initialize();
     }

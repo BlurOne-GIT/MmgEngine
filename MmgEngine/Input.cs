@@ -52,7 +52,7 @@ public static class Input
         RightButton = Convert.ToBoolean(mouseState.RightButton);
         XButton1 = Convert.ToBoolean(mouseState.XButton1);
         XButton2 = Convert.ToBoolean(mouseState.XButton2);
-        MousePoint = (mouseState.Position.ToVector2() / EngineStatics.Scale - EngineStatics.Offset).ToPoint();
+        MousePoint = ((mouseState.Position.ToVector2() - EngineStatics.Offset) / EngineStatics.Scale ).ToPoint();
     }
 
     private static void CheckMouseInput(ref bool button, bool value, [CallerMemberName] string name = null)
