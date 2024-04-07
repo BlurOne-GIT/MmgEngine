@@ -38,10 +38,6 @@ public abstract class GameState : DrawableGameComponent
     
     public event EventHandler<GameState> OnStateSwitched;
     
-    public new abstract void LoadContent();
-    
-    public new abstract void UnloadContent();
-    
     /// <summary>
     /// Change the current game state.
     /// </summary>

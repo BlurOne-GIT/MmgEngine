@@ -48,14 +48,12 @@ public abstract class EngineGame : Game
         if (CurrentGameState is not null)
         {
             CurrentGameState.OnStateSwitched -= OnStateSwitched;
-            CurrentGameState.UnloadContent();
             CurrentGameState.Dispose();
         }
 
         CurrentGameState = newGameState;
 
         CurrentGameState.Initialize();
-        CurrentGameState.LoadContent();
 
         CurrentGameState.OnStateSwitched += OnStateSwitched;
     }
