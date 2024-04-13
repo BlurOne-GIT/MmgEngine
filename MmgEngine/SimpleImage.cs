@@ -62,14 +62,14 @@ public class SimpleImage : DrawableGameComponent
     /// Draws another texture based on this image's parameters (can be modified).
     /// </summary>
     protected void DrawAnotherTexture(Texture2D texture, Vector2 positionOffset, int drawOrder,
-        Animation<Rectangle> animation = null, float opacityMultiplier = 1f, float rotationOffset = 0f, Vector2 pivot = default, Vector2 scaleMultiplier = default)
+        Rectangle? sourceRectangle = null, float opacityMultiplier = 1f, float rotationOffset = 0f, Vector2 pivot = default, Vector2 scaleMultiplier = default)
     {
         if (scaleMultiplier == default) scaleMultiplier = Vector2.One;
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Draw(
             texture,
             Position + positionOffset,
-            animation?.NextFrame(),
+            sourceRectangle,
             Color * Opacity * opacityMultiplier,
             _rotation + rotationOffset,
             pivot,
