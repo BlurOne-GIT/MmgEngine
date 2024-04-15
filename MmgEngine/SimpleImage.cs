@@ -13,16 +13,27 @@ public class SimpleImage : DrawableGameComponent
     private float _rotation;
     private Vector2 _pivot;
     private Texture2D _texture;
+    private Rectangle? _defaultRectangle;
     private Animation<Rectangle> _animation;
     #endregion
 
     #region Properties
+    public Rectangle CurrentRectangle => Animation?.CurrentFrame() ?? DefaultRectangle ?? Texture.Bounds;
     public Texture2D Texture
     {
         get => _texture;
         set
         {
             _texture = value;
+            RelocatePivot();
+        }
+    }
+    public Rectangle? DefaultRectangle
+    {
+        get => _defaultRectangle;
+        set
+        {
+            _defaultRectangle = value;
             RelocatePivot();
         }
     }
@@ -53,17 +64,17 @@ public class SimpleImage : DrawableGameComponent
 
     private void RelocatePivot()
     {
-        var frame = Animation?.CurrentFrame() ?? Texture.Bounds;
-        _pivot = frame.Size.ToVector2() * EngineStatics.Aligner(_anchor);
+        _pivot = CurrentRectangle.Size.ToVector2() * EngineStatics.Aligner(_anchor);
     }
 
     public override void Draw(GameTime gameTime)
     {
+        Animation?.NextFrame();
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Draw(
             Texture,
             Position,
-            Animation?.NextFrame(),
+            CurrentRectangle,
             Color * Opacity,
             _rotation,
             _pivot,
