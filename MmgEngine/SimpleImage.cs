@@ -9,15 +9,44 @@ namespace MmgEngine;
 public class SimpleImage : DrawableGameComponent
 {
     #region Fields
-    protected Texture2D Texture;
     private readonly Alignment _anchor;
     private float _rotation;
     private Vector2 _pivot;
+    private Texture2D _texture;
+    private Rectangle? _defaultRectangle;
+    private Animation<Rectangle> _animation;
     #endregion
 
     #region Properties
+    public Rectangle CurrentRectangle => Animation?.CurrentFrame() ?? DefaultRectangle ?? Texture.Bounds;
+    public Texture2D Texture
+    {
+        get => _texture;
+        set
+        {
+            _texture = value;
+            RelocatePivot();
+        }
+    }
+    public Rectangle? DefaultRectangle
+    {
+        get => _defaultRectangle;
+        set
+        {
+            _defaultRectangle = value;
+            RelocatePivot();
+        }
+    }
+    public Animation<Rectangle> Animation
+    {
+        get => _animation;
+        set
+        {
+            _animation = value; 
+            RelocatePivot();
+        }
+    }
     public Vector2 Position { get; set; }
-    public Animation<Rectangle> Animation { get; private set; }
     public Color Color { get; set; } = Color.White;
     public float Opacity { get; set; } = 1f;
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
@@ -25,29 +54,27 @@ public class SimpleImage : DrawableGameComponent
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
     #endregion
 
-    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft, Animation<Rectangle> animation = null) : base(game)
+    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft) : base(game)
     {
+        _anchor = anchor;
         Texture = texture;
         Position = position;
         DrawOrder = layer;
-        _anchor = anchor;
-        Animation = animation;
-        RelocatePivot();
     }
 
     private void RelocatePivot()
     {
-        var frame = Animation?.CurrentFrame() ?? Texture.Bounds;
-        _pivot = frame.Size.ToVector2() * EngineStatics.Aligner(_anchor);
+        _pivot = CurrentRectangle.Size.ToVector2() * EngineStatics.Aligner(_anchor);
     }
 
     public override void Draw(GameTime gameTime)
     {
+        Animation?.NextFrame();
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Draw(
             Texture,
             Position,
-            Animation?.NextFrame(),
+            CurrentRectangle,
             Color * Opacity,
             _rotation,
             _pivot,
@@ -62,14 +89,14 @@ public class SimpleImage : DrawableGameComponent
     /// Draws another texture based on this image's parameters (can be modified).
     /// </summary>
     protected void DrawAnotherTexture(Texture2D texture, Vector2 positionOffset, int drawOrder,
-        Animation<Rectangle> animation = null, float opacityMultiplier = 1f, float rotationOffset = 0f, Vector2 pivot = default, Vector2 scaleMultiplier = default)
+        Rectangle? sourceRectangle = null, float opacityMultiplier = 1f, float rotationOffset = 0f, Vector2 pivot = default, Vector2 scaleMultiplier = default)
     {
         if (scaleMultiplier == default) scaleMultiplier = Vector2.One;
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
         spriteBatch.Draw(
             texture,
             Position + positionOffset,
-            animation?.NextFrame(),
+            sourceRectangle,
             Color * Opacity * opacityMultiplier,
             _rotation + rotationOffset,
             pivot,
@@ -77,24 +104,5 @@ public class SimpleImage : DrawableGameComponent
             SpriteEffects,
             drawOrder * 0.1f
         );
-    }
-
-    public void ChangeTexture(Texture2D texture) {
-        Animation = null;
-        Texture = texture;
-        RelocatePivot();
-    }
-
-    public void ChangeAnimatedTexture(Texture2D texture, Animation<Rectangle> animation)
-    {
-        Texture = texture;
-        Animation = animation ?? Animation;
-        RelocatePivot();
-    }
-
-    public void ChangeAnimation(Animation<Rectangle> animation)
-    {
-        Animation = animation;
-        RelocatePivot();
     }
 }
