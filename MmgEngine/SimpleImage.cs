@@ -9,15 +9,33 @@ namespace MmgEngine;
 public class SimpleImage : DrawableGameComponent
 {
     #region Fields
-    protected Texture2D Texture;
     private readonly Alignment _anchor;
     private float _rotation;
     private Vector2 _pivot;
+    private Texture2D _texture;
+    private Animation<Rectangle> _animation;
     #endregion
 
     #region Properties
+    public Texture2D Texture
+    {
+        get => _texture;
+        set
+        {
+            _texture = value;
+            RelocatePivot();
+        }
+    }
+    public Animation<Rectangle> Animation
+    {
+        get => _animation;
+        set
+        {
+            _animation = value; 
+            RelocatePivot();
+        }
+    }
     public Vector2 Position { get; set; }
-    public Animation<Rectangle> Animation { get; private set; }
     public Color Color { get; set; } = Color.White;
     public float Opacity { get; set; } = 1f;
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
@@ -25,14 +43,12 @@ public class SimpleImage : DrawableGameComponent
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
     #endregion
 
-    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft, Animation<Rectangle> animation = null) : base(game)
+    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft) : base(game)
     {
+        _anchor = anchor;
         Texture = texture;
         Position = position;
         DrawOrder = layer;
-        _anchor = anchor;
-        Animation = animation;
-        RelocatePivot();
     }
 
     private void RelocatePivot()
@@ -77,24 +93,5 @@ public class SimpleImage : DrawableGameComponent
             SpriteEffects,
             drawOrder * 0.1f
         );
-    }
-
-    public void ChangeTexture(Texture2D texture) {
-        Animation = null;
-        Texture = texture;
-        RelocatePivot();
-    }
-
-    public void ChangeAnimatedTexture(Texture2D texture, Animation<Rectangle> animation)
-    {
-        Texture = texture;
-        Animation = animation ?? Animation;
-        RelocatePivot();
-    }
-
-    public void ChangeAnimation(Animation<Rectangle> animation)
-    {
-        Animation = animation;
-        RelocatePivot();
     }
 }
