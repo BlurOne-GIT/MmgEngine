@@ -54,7 +54,11 @@ public class SimpleImage : DrawableGameComponent
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
     #endregion
 
-    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft) : base(game)
+    public SimpleImage(Game game, string texturePath, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft)
+        : this(game, game.Content.Load<Texture2D>(texturePath), position, layer, anchor) { }
+    
+    public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft)
+        : base(game)
     {
         _anchor = anchor;
         Texture = texture;
