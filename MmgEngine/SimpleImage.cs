@@ -18,7 +18,8 @@ public class SimpleImage : DrawableGameComponent
     #endregion
 
     #region Properties
-    public Rectangle CurrentRectangle => Animation?.CurrentFrame() ?? DefaultRectangle ?? Texture.Bounds;
+    public Rectangle CurrentRectangle => NullableCurrentRectangle ?? Texture.Bounds;
+    private Rectangle? NullableCurrentRectangle => Animation?.CurrentFrame() ?? DefaultRectangle;
     public Texture2D Texture
     {
         get => _texture;
@@ -78,7 +79,7 @@ public class SimpleImage : DrawableGameComponent
         spriteBatch.Draw(
             Texture,
             Position,
-            CurrentRectangle,
+            NullableCurrentRectangle,
             Color * Opacity,
             _rotation,
             _pivot,
