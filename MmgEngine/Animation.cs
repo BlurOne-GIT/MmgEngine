@@ -81,14 +81,14 @@ public class Animation<T>
     /// Tool for creating a texture animation for tilesheets.
     /// </summary>
     /// <returns>Animation of rectangles to be used in a SpriteBatch.Draw while passing the whole tilesheet as the Texture.</returns>
-    public static Animation<Rectangle> TextureAnimation(Point tileSize, Point textureBounds, bool looped, int frameDuration) 
+    public static Animation<Rectangle> TextureAnimation(Point tileSize, Point textureBounds, bool looped, int frameDuration = 1) 
         => TextureAnimation(tileSize, new Rectangle(0, 0, textureBounds.X, textureBounds.Y), looped, frameDuration);
     
     /// <summary>
     /// Tool for creating a texture animation for tilesheets.
     /// </summary>
     /// <returns>Animation of rectangles to be used in a SpriteBatch.Draw while passing the whole tilesheet as the Texture.</returns>
-    public static Animation<Rectangle> TextureAnimation(Point tileSize, Rectangle textureBounds, bool looped, int frameDuration)
+    public static Animation<Rectangle> TextureAnimation(Point tileSize, Rectangle textureBounds, bool looped, int frameDuration = 1)
     {
         var frames = new List<Rectangle>();
         for (int y = textureBounds.Y; y < textureBounds.Height; y += tileSize.Y)
