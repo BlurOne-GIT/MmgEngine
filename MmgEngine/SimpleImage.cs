@@ -93,8 +93,17 @@ public class SimpleImage : DrawableGameComponent
     /// For inheritance purposes.
     /// Draws another texture based on this image's parameters (can be modified).
     /// </summary>
-    protected void DrawAnotherTexture(Texture2D texture, Vector2 positionOffset, int drawOrder,
-        Rectangle? sourceRectangle = null, float opacityMultiplier = 1f, float rotationOffset = 0f, Vector2 pivot = default, Vector2 scaleMultiplier = default)
+    protected void DrawAnotherTexture(
+        Texture2D texture,
+        Vector2 positionOffset,
+        int drawOrder,
+        Rectangle? sourceRectangle = null,
+        float opacityMultiplier = 1f,
+        float rotationOffset = 0f,
+        Vector2 pivot = default,
+        Vector2 scaleMultiplier = default,
+        SpriteEffects? spriteEffectsOverride = null
+        )
     {
         if (scaleMultiplier == default) scaleMultiplier = Vector2.One;
         var spriteBatch = Game.Services.GetService<SpriteBatch>();
@@ -106,7 +115,7 @@ public class SimpleImage : DrawableGameComponent
             _rotation + rotationOffset,
             pivot,
             Scale * scaleMultiplier,
-            SpriteEffects,
+            spriteEffectsOverride ?? SpriteEffects,
             drawOrder * 0.1f
         );
     }
