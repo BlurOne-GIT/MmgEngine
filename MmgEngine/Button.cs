@@ -9,7 +9,6 @@ namespace MmgEngine;
 public class Button : DrawableGameComponent
 {
     #region Events
-
     public event EventHandler<ButtonEventArgs> Clicked; 
     public event EventHandler<ButtonEventArgs> LeftClicked;
     public event EventHandler<ButtonEventArgs> MiddleClicked;

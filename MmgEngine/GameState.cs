@@ -51,4 +51,22 @@ public abstract class GameState : DrawableGameComponent
         if (e.GameComponent is IDisposable disposable)
             disposable.Dispose();
     }
+
+    protected override void OnEnabledChanged(object sender, EventArgs args)
+    {
+        foreach (var component in Components)
+            if (component is GameComponent gameComponent)
+                gameComponent.Enabled = Enabled;
+        
+        base.OnEnabledChanged(sender, args);
+    }
+
+    protected override void OnVisibleChanged(object sender, EventArgs args)
+    {
+        foreach (var component in Components)
+            if (component is DrawableGameComponent drawable)
+                drawable.Visible = Visible;
+        
+        base.OnVisibleChanged(sender, args);
+    }
 }
