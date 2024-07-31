@@ -9,11 +9,11 @@ namespace MmgEngine;
 public class Button : DrawableGameComponent
 {
     #region Events
-    public event EventHandler LeftClicked;
-    public event EventHandler MiddleClicked;
-    public event EventHandler RightClicked;
-    public event EventHandler XButton1Clicked;
-    public event EventHandler XButton2Clicked;
+    public event EventHandler<ButtonEventArgs> LeftClicked;
+    public event EventHandler<ButtonEventArgs> MiddleClicked;
+    public event EventHandler<ButtonEventArgs> RightClicked;
+    public event EventHandler<ButtonEventArgs> XButton1Clicked;
+    public event EventHandler<ButtonEventArgs> XButton2Clicked;
     #endregion
 
     #region Properties
@@ -79,19 +79,19 @@ public class Button : DrawableGameComponent
         switch (e.Button)
         {
             case "LeftButton":
-                LeftClicked?.Invoke(this, EventArgs.Empty);
+                LeftClicked?.Invoke(this, e);
                 break;
             case "MiddleButton":
-                MiddleClicked?.Invoke(this, EventArgs.Empty);
+                MiddleClicked?.Invoke(this, e);
                 break;
             case "RightButton":
-                RightClicked?.Invoke(this, EventArgs.Empty);
+                RightClicked?.Invoke(this, e);
                 break;
             case "XButton1":
-                XButton1Clicked?.Invoke(this, EventArgs.Empty);
+                XButton1Clicked?.Invoke(this, e);
                 break;
             case "XButton2":
-                XButton2Clicked?.Invoke(this, EventArgs.Empty);
+                XButton2Clicked?.Invoke(this, e);
                 break;
         }
     }
