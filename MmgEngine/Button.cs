@@ -9,6 +9,8 @@ namespace MmgEngine;
 public class Button : DrawableGameComponent
 {
     #region Events
+
+    public event EventHandler<ButtonEventArgs> Clicked; 
     public event EventHandler<ButtonEventArgs> LeftClicked;
     public event EventHandler<ButtonEventArgs> MiddleClicked;
     public event EventHandler<ButtonEventArgs> RightClicked;
@@ -94,6 +96,7 @@ public class Button : DrawableGameComponent
                 XButton2Clicked?.Invoke(this, e);
                 break;
         }
+        Clicked?.Invoke(this, e);
     }
 
     public override void Update(GameTime gameTime)
