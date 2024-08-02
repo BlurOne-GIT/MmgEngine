@@ -13,12 +13,13 @@ public abstract class EngineGame : Game
     protected GraphicsDeviceManager Graphics;
     protected SpriteBatch SpriteBatch;
     protected Matrix ViewportMatrix;
-    protected GameState CurrentGameState;
+    protected GameStateManager<GameState> GameStateManager { get; }
 
     public EngineGame()
     {
         Graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
+        GameStateManager = new GameStateManager<GameState>(Components);
     }
 
     protected override void Initialize()
@@ -37,29 +38,6 @@ public abstract class EngineGame : Game
         
         // TODO: use this.Content to load your game content here
     }
-
-    /// <summary>
-    /// Call this method to switch the current game state.
-    /// Also called by <see cref="GameState.OnStateSwitched"/>.
-    /// </summary>
-    /// <param name="newGameState">New game state.</param>
-    protected virtual void SwitchGameState(GameState newGameState)
-    {
-        if (CurrentGameState is not null)
-        {
-            Components.Remove(CurrentGameState);
-            CurrentGameState.OnStateSwitched -= OnStateSwitched;
-            CurrentGameState.Dispose();
-        }
-
-        CurrentGameState = newGameState;
-
-        Components.Add(CurrentGameState);
-
-        CurrentGameState.OnStateSwitched += OnStateSwitched;
-    }
-
-    private void OnStateSwitched(object s, GameState e) => SwitchGameState(e);
     
     private void OnViewportChanged(object? s, EventArgs e)
         => ViewportMatrix = Matrix.CreateScale(EngineStatics.Scale.X, EngineStatics.Scale.Y, 1) * 
