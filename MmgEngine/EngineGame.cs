@@ -61,7 +61,7 @@ public abstract class EngineGame : Game
 
     private void OnStateSwitched(object s, GameState e) => SwitchGameState(e);
     
-    private void OnViewportChanged(object s, EventArgs e)
+    private void OnViewportChanged(object? s, EventArgs e)
         => ViewportMatrix = Matrix.CreateScale(EngineStatics.Scale.X, EngineStatics.Scale.Y, 1) * 
                             Matrix.CreateTranslation(EngineStatics.Offset.X, EngineStatics.Offset.Y, 0);
 }

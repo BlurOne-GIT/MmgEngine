@@ -22,7 +22,7 @@ public class TextComponent : DrawableGameComponent
     public float Opacity { get; set; } = 1f;
     public float Rotation { get => MathHelper.ToDegrees(_rotation); set => _rotation = MathHelper.ToRadians(value); }
     public Vector2 Scale { get; set; } = Vector2.One;
-    public string Text { get => _text; set {_text = value; RelocatePivot();} }
+    public string Text { get => _text; set { _text = value; RelocatePivot(); } }
     public SpriteEffects SpriteEffects { get; set; } = SpriteEffects.None;
 
     #endregion

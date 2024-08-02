@@ -14,7 +14,7 @@ public class SimpleImage : DrawableGameComponent
     private Vector2 _pivot;
     private Texture2D _texture;
     private Rectangle? _defaultRectangle;
-    private Animation<Rectangle> _animation;
+    private Animation<Rectangle>? _animation;
     #endregion
 
     #region Properties
@@ -32,13 +32,9 @@ public class SimpleImage : DrawableGameComponent
     public Rectangle? DefaultRectangle
     {
         get => _defaultRectangle;
-        set
-        {
-            _defaultRectangle = value;
-            RelocatePivot();
-        }
+        set { _defaultRectangle = value; RelocatePivot(); }
     }
-    public Animation<Rectangle> Animation
+    public Animation<Rectangle>? Animation
     {
         get => _animation;
         set

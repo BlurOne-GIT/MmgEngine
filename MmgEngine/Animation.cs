@@ -28,7 +28,7 @@ public class Animation<T>
     public bool Paused { get; set; } = false;
     public bool IsAtEnd => Position >= Length;
     private bool _eventFired;
-    public event EventHandler AnimationReachedEnd;
+    public event EventHandler? AnimationReachedEnd;
     #endregion
 
     public Animation(T[] frames, bool looped, int frameDuration = 1)

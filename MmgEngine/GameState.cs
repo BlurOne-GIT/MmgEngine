@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -30,14 +29,14 @@ public abstract class GameState : DrawableGameComponent
     /// <summary>
     /// Handle button clicks.
     /// </summary>
-    public virtual void HandleInput(object sender, ButtonEventArgs eventArgs) {}
+    public virtual void HandleInput(object? sender, ButtonEventArgs eventArgs) {}
     
     /// <summary>
     /// Handle key presses.
     /// </summary>
-    public virtual void HandleInput(object sender, InputKeyEventArgs eventArgs) {}
+    public virtual void HandleInput(object? sender, InputKeyEventArgs eventArgs) {}
     
-    public event EventHandler<GameState> OnStateSwitched;
+    public event EventHandler<GameState>? OnStateSwitched;
     
     /// <summary>
     /// Change the current game state.
@@ -45,7 +44,7 @@ public abstract class GameState : DrawableGameComponent
     /// <param name="gameState">New game state.</param>
     protected void SwitchState(GameState gameState) => OnStateSwitched?.Invoke(this, gameState);
 
-    private void OnComponentAdded(object s, GameComponentCollectionEventArgs e)
+    private void OnComponentAdded(object? s, GameComponentCollectionEventArgs e)
     {
         if (!Enabled && e.GameComponent is GameComponent { Enabled: true } gameComponent)
         {
@@ -62,7 +61,7 @@ public abstract class GameState : DrawableGameComponent
         Game.Components.Add(e.GameComponent);
     }
 
-    private void OnComponentRemoved(object s, GameComponentCollectionEventArgs e)
+    private void OnComponentRemoved(object? s, GameComponentCollectionEventArgs e)
     {
         Game.Components.Remove(e.GameComponent);
         if (e.GameComponent is IDisposable disposable)
@@ -72,7 +71,7 @@ public abstract class GameState : DrawableGameComponent
     private readonly HashSet<GameComponent> _previousEnabled = new();
     private readonly HashSet<DrawableGameComponent> _previousVisible = new();
     
-    protected override void OnEnabledChanged(object sender, EventArgs args)
+    protected override void OnEnabledChanged(object? sender, EventArgs args)
     {
         if (Enabled)
         {

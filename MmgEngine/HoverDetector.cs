@@ -8,8 +8,8 @@ namespace MmgEngine;
 /// </summary>
 public class HoverDetector : GameComponent
 {
-    public event EventHandler Hovered;
-    public event EventHandler Unhovered;
+    public event EventHandler? Hovered;
+    public event EventHandler? Unhovered;
 
     public Vector2 Position
     {
