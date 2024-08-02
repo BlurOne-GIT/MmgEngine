@@ -13,13 +13,13 @@ public abstract class EngineGame : Game
     protected GraphicsDeviceManager Graphics;
     protected SpriteBatch SpriteBatch;
     protected Matrix ViewportMatrix;
-    protected GameStateManager<GameState> GameStateManager { get; }
+    protected GameStateManager GameStateManager { get; }
 
     public EngineGame()
     {
         Graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
-        GameStateManager = new GameStateManager<GameState>(Components);
+        GameStateManager = new GameStateManager(Components);
     }
 
     protected override void Initialize()

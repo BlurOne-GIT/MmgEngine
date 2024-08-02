@@ -15,6 +15,12 @@ public class SwitchingGameStateEventArgs<TGameState> : EventArgs where TGameStat
     public TGameState? NewGameState { get; }
 }
 
+public class GameStateManager : GameStateManager<GameState>
+{
+    // Move constructor up once upgraded to .Net 8
+    public GameStateManager(GameComponentCollection gameComponentCollection) : base(gameComponentCollection) { }
+}
+
 public class GameStateManager<TGameState> where TGameState : GameState
 {
     public event EventHandler<SwitchingGameStateEventArgs<TGameState>>? Switched;
