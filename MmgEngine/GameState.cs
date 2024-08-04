@@ -12,6 +12,7 @@ public abstract class GameState : DrawableGameComponent
         Input.ButtonDown += HandleInput;
         Components.ComponentAdded += OnComponentAdded;
         Components.ComponentRemoved += OnComponentRemoved;
+        Game.Components.ComponentRemoved += OnGlobalComponentRemoved;
     }
 
     protected override void Dispose(bool disposing)
@@ -21,6 +22,7 @@ public abstract class GameState : DrawableGameComponent
         Components.ComponentAdded -= OnComponentAdded;
         Components.Clear();
         Components.ComponentRemoved -= OnComponentRemoved;
+        Game.Components.ComponentRemoved -= OnGlobalComponentRemoved;
         base.Dispose(disposing);
     }
     
@@ -46,16 +48,24 @@ public abstract class GameState : DrawableGameComponent
 
     private void OnComponentAdded(object? s, GameComponentCollectionEventArgs e)
     {
-        if (!Enabled && e.GameComponent is GameComponent { Enabled: true } gameComponent)
+        if (!Enabled && e.GameComponent is GameComponent gameComponent)
         {
-            _previousEnabled.Add(gameComponent);
-            gameComponent.Enabled = false;
+            if (gameComponent.Enabled)
+            {
+                _previousEnabled.Add(gameComponent);
+                gameComponent.Enabled = false;
+            }
+            gameComponent.EnabledChanged += OnEnabledChangePrevention;
         }
 
-        if (!Visible && e.GameComponent is DrawableGameComponent { Visible: true } drawable)
+        if (!Visible && e.GameComponent is DrawableGameComponent drawable)
         {
-            _previousVisible.Add(drawable);
-            drawable.Visible = false;
+            if (drawable.Visible)
+            {
+                _previousVisible.Add(drawable);
+                drawable.Visible = false;
+            }
+            drawable.VisibleChanged += OnVisibleChangePrevention;
         }
         
         Game.Components.Add(e.GameComponent);
@@ -63,10 +73,24 @@ public abstract class GameState : DrawableGameComponent
 
     private void OnComponentRemoved(object? s, GameComponentCollectionEventArgs e)
     {
+        if (e.GameComponent is GameComponent gameComponent)
+        {
+            _previousEnabled.Remove(gameComponent);
+            gameComponent.EnabledChanged -= OnEnabledChangePrevention;
+        }
+        if (e.GameComponent is DrawableGameComponent drawable)
+        {
+            _previousVisible.Remove(drawable);
+            drawable.VisibleChanged -= OnVisibleChangePrevention;
+        }
+        
         Game.Components.Remove(e.GameComponent);
         if (e.GameComponent is IDisposable disposable)
             disposable.Dispose();
     }
+
+    private void OnGlobalComponentRemoved(object? s, GameComponentCollectionEventArgs e)
+        => Components.Remove(e.GameComponent);
     
     private readonly HashSet<GameComponent> _previousEnabled = new();
     private readonly HashSet<DrawableGameComponent> _previousVisible = new();
@@ -76,20 +100,34 @@ public abstract class GameState : DrawableGameComponent
         if (Enabled)
         {
             foreach (var component in Components)
-                if (component is GameComponent gameComponent && _previousEnabled.Remove(gameComponent))
-                    gameComponent.Enabled = true;
+                if (component is GameComponent gameComponent)
+                {
+                    gameComponent.EnabledChanged -= OnEnabledChangePrevention;
+                    if (_previousEnabled.Remove(gameComponent))
+                        gameComponent.Enabled = true;
+                }
         }
         else
         {
             foreach (var component in Components)
-                if (component is GameComponent { Enabled: true } gameComponent)
+                if (component is GameComponent gameComponent)
                 {
-                    _previousEnabled.Add(gameComponent);
-                    gameComponent.Enabled = false;
+                    if (gameComponent.Enabled)
+                    {
+                        _previousEnabled.Add(gameComponent);
+                        gameComponent.Enabled = false;
+                    }
+                    gameComponent.EnabledChanged += OnEnabledChangePrevention;
                 }
         }
         
         base.OnEnabledChanged(sender, args);
+    }
+
+    private static void OnEnabledChangePrevention(object? sender, EventArgs _)
+    {
+        if (sender is not GameComponent { Enabled: true } gameComponent) return;
+        gameComponent.Enabled = false;
     }
 
     protected override void OnVisibleChanged(object sender, EventArgs args)
@@ -98,19 +136,32 @@ public abstract class GameState : DrawableGameComponent
         {
             foreach (var component in Components)
                 if (component is DrawableGameComponent drawable && _previousVisible.Remove(drawable))
+                {
+                    drawable.VisibleChanged -= OnVisibleChangePrevention;
                     drawable.Visible = true;
+                }
         }
         else
         {
             foreach (var component in Components)
-                if (component is DrawableGameComponent { Visible: true } drawable)
+                if (component is DrawableGameComponent drawable)
                 {
-                    _previousVisible.Add(drawable);
-                    drawable.Visible = false;
+                    if (drawable.Visible)
+                    {
+                        _previousVisible.Add(drawable);
+                        drawable.Visible = false;
+                    }
+                    drawable.VisibleChanged += OnVisibleChangePrevention;
                 }
         }
         
         
         base.OnVisibleChanged(sender, args);
+    }
+    
+    private static void OnVisibleChangePrevention(object? sender, EventArgs _)
+    {
+        if (sender is not DrawableGameComponent { Visible: true } drawable) return;
+        drawable.Visible = false;
     }
 }
