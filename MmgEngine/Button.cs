@@ -6,7 +6,7 @@ namespace MmgEngine;
 /// <summary>
 /// A rectangle that emits events when clicking on it. Can have a <see cref="SimpleImage"/> and a <see cref="HoverDetector"/>.
 /// </summary>
-public class Button : DrawableGameComponent
+public class Button : GameComponent
 {
     #region Events
     public event EventHandler<ButtonEventArgs>? Clicked; 
@@ -18,16 +18,10 @@ public class Button : DrawableGameComponent
     #endregion
 
     #region Properties
-    public SimpleImage? Image { get; }
-    public HoverDetector? HoverDetector { get; }
     public Vector2 Position
     {
         get => _actionBox.Location.ToVector2() + _actionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft);
-        set
-        {
-            _actionBox.Location = (value - _actionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft)).ToPoint();
-            if (HoverDetector != null) HoverDetector.Position = value;
-        }
+        set => _actionBox.Location = (value - _actionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft)).ToPoint();
     }
 
     public Vector2 Size
@@ -38,7 +32,6 @@ public class Button : DrawableGameComponent
             var oldExternalLocation = Position;
             _actionBox.Size = value.ToPoint();
             _actionBox.Location = (oldExternalLocation - _actionBox.Size.ToVector2() * EngineStatics.Aligner(_alignment)).ToPoint();
-            if (HoverDetector != null) HoverDetector.Size = value;
         }
     }
     #endregion
@@ -49,29 +42,16 @@ public class Button : DrawableGameComponent
     #endregion
 
     //Constructor
-    public Button(Game game, Rectangle actionBox, SimpleImage? texture = null, Alignment alignment = Alignment.TopLeft, bool hasHover = false) : base(game)
+    public Button(Game game, Rectangle actionBox, Alignment alignment = Alignment.TopLeft) : base(game)
     {
         _alignment = alignment;
         actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(alignment)).ToPoint();
         _actionBox = actionBox;
         
-        if (hasHover)
-            HoverDetector = new HoverDetector(game, actionBox, alignment){Enabled = Enabled};
-        
-        Image = texture;
-        Visible = texture is not null;
-        if (texture is not null)
-            DrawOrder = texture.DrawOrder;
-        
         Input.ButtonDown += Check;
     }
 
     #region Methods
-    public override void Draw(GameTime gameTime) 
-    {
-        if ((bool)Image?.Visible) Image.Draw(gameTime);
-    }
-
     private void Check(object? s, ButtonEventArgs e)
     {
         if (!Enabled || !_actionBox.Contains(e.Position))
@@ -98,17 +78,9 @@ public class Button : DrawableGameComponent
         Clicked?.Invoke(this, e);
     }
 
-    public override void Update(GameTime gameTime)
-    {
-        if (HoverDetector is not null && HoverDetector.Enabled)
-            HoverDetector.Update(gameTime);
-        base.Update(gameTime);
-    }
-
     protected override void Dispose(bool disposing)
     {
         Input.ButtonDown -= Check;
-        HoverDetector?.Dispose();
         base.Dispose(disposing);
     }
     #endregion
