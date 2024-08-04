@@ -6,8 +6,11 @@ namespace MmgEngine;
 
 public abstract class GameState : DrawableGameComponent
 {
-    public GameState(Game game) : base(game)
+    private bool _autoDisposeComponents;
+    
+    public GameState(Game game, bool autoDisposeComponents = true) : base(game)
     {
+        _autoDisposeComponents = autoDisposeComponents;
         Game.Window.KeyDown += HandleInput;
         Input.ButtonDown += HandleInput;
         Components.ComponentAdded += OnComponentAdded;
@@ -20,6 +23,7 @@ public abstract class GameState : DrawableGameComponent
         Game.Window.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
         Components.ComponentAdded -= OnComponentAdded;
+        _autoDisposeComponents = disposing;
         Components.Clear();
         Components.ComponentRemoved -= OnComponentRemoved;
         Game.Components.ComponentRemoved -= OnGlobalComponentRemoved;
@@ -85,7 +89,7 @@ public abstract class GameState : DrawableGameComponent
         }
         
         Game.Components.Remove(e.GameComponent);
-        if (e.GameComponent is IDisposable disposable)
+        if (_autoDisposeComponents && e.GameComponent is IDisposable disposable)
             disposable.Dispose();
     }
 
