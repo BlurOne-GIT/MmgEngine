@@ -23,10 +23,10 @@ public abstract class GameState : DrawableGameComponent
         Game.Window.KeyDown -= HandleInput;
         Input.ButtonDown -= HandleInput;
         Components.ComponentAdded -= OnComponentAdded;
+        Game.Components.ComponentRemoved -= OnGlobalComponentRemoved;
         _autoDisposeComponents = disposing;
         Components.Clear();
         Components.ComponentRemoved -= OnComponentRemoved;
-        Game.Components.ComponentRemoved -= OnGlobalComponentRemoved;
         base.Dispose(disposing);
     }
     
