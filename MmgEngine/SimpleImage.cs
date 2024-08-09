@@ -20,6 +20,7 @@ public class SimpleImage : DrawableGameComponent
     #region Properties
     public Rectangle CurrentSource => NullableCurrentSource ?? Texture.Bounds;
     private Rectangle? NullableCurrentSource => Animation?.CurrentFrame() ?? DefaultSource;
+    
     public Texture2D Texture
     {
         get => _texture;
@@ -29,11 +30,13 @@ public class SimpleImage : DrawableGameComponent
             RelocatePivot();
         }
     }
+    
     public Rectangle? DefaultSource
     {
         get => _defaultSource;
         set { _defaultSource = value; RelocatePivot(); }
     }
+    
     public Animation<Rectangle>? Animation
     {
         get => _animation;
@@ -43,6 +46,7 @@ public class SimpleImage : DrawableGameComponent
             RelocatePivot();
         }
     }
+    
     public Vector2 Position { get; set; }
     public Color Color { get; set; } = Color.White;
     public float Opacity { get; set; } = 1f;
