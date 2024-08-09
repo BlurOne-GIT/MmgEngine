@@ -47,6 +47,8 @@ public class MouseHelper : GameComponent
     
     public static Point MousePoint { get; private set; }
     public static Vector2 MouseVector => MousePoint.ToVector2();
+    private static MouseState _lastMouseState;
+    private static long _lastGameTime = -1L;
     
     public MouseHelper(Game game, bool allowOutsideHolding) : base(game)
     {
@@ -59,17 +61,21 @@ public class MouseHelper : GameComponent
         _xButton1 = Convert.ToBoolean(mouseState.XButton1);
         _xButton2 = Convert.ToBoolean(mouseState.XButton2);
     }
-
+    
     public override void Update(GameTime gameTime)
     {
-        var mouseState = Mouse.GetState();
-        MousePoint = ((mouseState.Position.ToVector2() - EngineStatics.Offset) / EngineStatics.Scale).ToPoint();
+        if (gameTime.TotalGameTime.Ticks != _lastGameTime)
+        {
+            _lastGameTime = gameTime.TotalGameTime.Ticks;
+            _lastMouseState = Mouse.GetState();
+            MousePoint = ((_lastMouseState.Position.ToVector2() - EngineStatics.Offset) / EngineStatics.Scale).ToPoint();
+        }
         _pressed = _released = MouseButtons.None;
-        LeftButton = Convert.ToBoolean(mouseState.LeftButton);
-        MiddleButton = Convert.ToBoolean(mouseState.MiddleButton);
-        RightButton = Convert.ToBoolean(mouseState.RightButton);
-        XButton1 = Convert.ToBoolean(mouseState.XButton1);
-        XButton2 = Convert.ToBoolean(mouseState.XButton2);
+        LeftButton = Convert.ToBoolean(_lastMouseState.LeftButton);
+        MiddleButton = Convert.ToBoolean(_lastMouseState.MiddleButton);
+        RightButton = Convert.ToBoolean(_lastMouseState.RightButton);
+        XButton1 = Convert.ToBoolean(_lastMouseState.XButton1);
+        XButton2 = Convert.ToBoolean(_lastMouseState.XButton2);
         if (_pressed != MouseButtons.None)
             ButtonDown?.Invoke(this, _pressed);
         if (_released != MouseButtons.None)
