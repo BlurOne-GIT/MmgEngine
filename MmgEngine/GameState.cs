@@ -11,8 +11,6 @@ public abstract class GameState : DrawableGameComponent
     public GameState(Game game, bool autoDisposeComponents = true) : base(game)
     {
         _autoDisposeComponents = autoDisposeComponents;
-        Game.Window.KeyDown += HandleInput;
-        Input.ButtonDown += HandleInput;
         Components.ComponentAdded += OnComponentAdded;
         Components.ComponentRemoved += OnComponentRemoved;
         Game.Components.ComponentRemoved += OnGlobalComponentRemoved;
@@ -20,8 +18,6 @@ public abstract class GameState : DrawableGameComponent
 
     protected override void Dispose(bool disposing)
     {
-        Game.Window.KeyDown -= HandleInput;
-        Input.ButtonDown -= HandleInput;
         Components.ComponentAdded -= OnComponentAdded;
         Game.Components.ComponentRemoved -= OnGlobalComponentRemoved;
         _autoDisposeComponents = disposing;
@@ -31,16 +27,6 @@ public abstract class GameState : DrawableGameComponent
     }
     
     protected readonly GameComponentCollection Components = new();
-    
-    /// <summary>
-    /// Handle button clicks.
-    /// </summary>
-    public virtual void HandleInput(object? sender, ButtonEventArgs eventArgs) {}
-    
-    /// <summary>
-    /// Handle key presses.
-    /// </summary>
-    public virtual void HandleInput(object? sender, InputKeyEventArgs eventArgs) {}
     
     public event EventHandler<GameState>? OnStateSwitched;
     

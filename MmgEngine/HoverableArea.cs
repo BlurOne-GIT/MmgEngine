@@ -1,12 +1,13 @@
 using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace MmgEngine;
 
 /// <summary>
 /// Rectangle that emits events when the mouse is hovering over it.
 /// </summary>
-public class HoverDetector : GameComponent
+public class HoverableArea : GameComponent
 {
     public event EventHandler? Hovered;
     public event EventHandler? Unhovered;
@@ -32,7 +33,7 @@ public class HoverDetector : GameComponent
     private readonly Alignment _alignment;
     public bool Hovering { get; private set; }
 
-    public HoverDetector(Game game, Rectangle actionBox, Alignment alignment = Alignment.TopLeft) : base(game)
+    public HoverableArea(Game game, Rectangle actionBox, Alignment alignment = Alignment.TopLeft) : base(game)
     {
         _alignment = alignment;
         actionBox.Location -= (actionBox.Size.ToVector2() * EngineStatics.Aligner(alignment)).ToPoint();
@@ -44,7 +45,9 @@ public class HoverDetector : GameComponent
         if (!Game.IsActive)
             return;
 
-        var contains = _actionBox.Contains(Input.MousePoint);
+        var contains = _actionBox.Contains(
+                ((Mouse.GetState().Position.ToVector2() - EngineStatics.Offset) / EngineStatics.Scale).ToPoint()
+            );
         
         if (contains == Hovering)
             return;

@@ -24,7 +24,9 @@ public abstract class EngineGame : Game
 
     protected override void Initialize()
     {
-        Input.Game = this;
+        var mouseHelper = new MouseHelper(this, false);
+        Components.Add(mouseHelper);
+        Services.AddService(mouseHelper);
         
         OnViewportChanged(this, EventArgs.Empty);
         EngineStatics.ViewportChanged += OnViewportChanged;
