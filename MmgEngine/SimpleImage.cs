@@ -13,13 +13,13 @@ public class SimpleImage : DrawableGameComponent
     private float _rotation;
     private Vector2 _pivot;
     private Texture2D _texture;
-    private Rectangle? _defaultRectangle;
+    private Rectangle? _defaultSource;
     private Animation<Rectangle>? _animation;
     #endregion
 
     #region Properties
-    public Rectangle CurrentRectangle => NullableCurrentRectangle ?? Texture.Bounds;
-    private Rectangle? NullableCurrentRectangle => Animation?.CurrentFrame() ?? DefaultRectangle;
+    public Rectangle CurrentSource => NullableCurrentSource ?? Texture.Bounds;
+    private Rectangle? NullableCurrentSource => Animation?.CurrentFrame() ?? DefaultSource;
     public Texture2D Texture
     {
         get => _texture;
@@ -29,10 +29,10 @@ public class SimpleImage : DrawableGameComponent
             RelocatePivot();
         }
     }
-    public Rectangle? DefaultRectangle
+    public Rectangle? DefaultSource
     {
-        get => _defaultRectangle;
-        set { _defaultRectangle = value; RelocatePivot(); }
+        get => _defaultSource;
+        set { _defaultSource = value; RelocatePivot(); }
     }
     public Animation<Rectangle>? Animation
     {
@@ -58,14 +58,15 @@ public class SimpleImage : DrawableGameComponent
         : base(game)
     {
         _anchor = anchor;
-        Texture = texture;
+        _texture = texture;
+        RelocatePivot();
         Position = position;
         DrawOrder = layer;
     }
 
     private void RelocatePivot()
     {
-        _pivot = CurrentRectangle.Size.ToVector2() * EngineStatics.Aligner(_anchor);
+        _pivot = CurrentSource.Size.ToVector2() * EngineStatics.Aligner(_anchor);
     }
 
     public override void Draw(GameTime gameTime)
@@ -75,7 +76,7 @@ public class SimpleImage : DrawableGameComponent
         spriteBatch.Draw(
             Texture,
             Position,
-            NullableCurrentRectangle,
+            NullableCurrentSource,
             Color * Opacity,
             _rotation,
             _pivot,
