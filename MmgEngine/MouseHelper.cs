@@ -92,7 +92,7 @@ public class MouseHelper : GameComponent
         {
             if (!_allowOutsideHolding)
                 value = false;
-            else
+            else if (value)
                 return;
         }
 
