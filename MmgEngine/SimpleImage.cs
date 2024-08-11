@@ -58,12 +58,13 @@ public class SimpleImage : DrawableGameComponent
     public SimpleImage(Game game, string texturePath, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft)
         : this(game, game.Content.Load<Texture2D>(texturePath), position, layer, anchor) { }
     
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public SimpleImage(Game game, Texture2D texture, Vector2 position, int layer, Alignment anchor = Alignment.TopLeft)
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         : base(game)
     {
         _anchor = anchor;
-        _texture = texture;
-        RelocatePivot();
+        Texture = texture;
         Position = position;
         DrawOrder = layer;
     }

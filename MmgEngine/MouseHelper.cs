@@ -53,6 +53,18 @@ public class MouseHelper : GameComponent
     public MouseHelper(Game game, bool allowOutsideHolding) : base(game)
     {
         _allowOutsideHolding = allowOutsideHolding;
+        PreSetValues();
+    }
+
+    protected override void OnEnabledChanged(object sender, EventArgs args)
+    {
+        if (Enabled)
+            PreSetValues();
+        base.OnEnabledChanged(sender, args);
+    }
+
+    private void PreSetValues()
+    {
         var mouseState = Mouse.GetState();
         MousePoint = ((mouseState.Position.ToVector2() - EngineStatics.Offset) / EngineStatics.Scale).ToPoint();
         _leftButton = Convert.ToBoolean(mouseState.LeftButton);
@@ -61,7 +73,7 @@ public class MouseHelper : GameComponent
         _xButton1 = Convert.ToBoolean(mouseState.XButton1);
         _xButton2 = Convert.ToBoolean(mouseState.XButton2);
     }
-    
+
     public override void Update(GameTime gameTime)
     {
         if (gameTime.TotalGameTime.Ticks != _lastGameTime)

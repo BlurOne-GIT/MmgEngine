@@ -15,7 +15,9 @@ public abstract class EngineGame : Game
     protected Matrix ViewportMatrix;
     protected GameStateManager GameStateManager { get; }
 
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public EngineGame()
+#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     {
         Graphics = new GraphicsDeviceManager(this);
         Content.RootDirectory = "Content";
