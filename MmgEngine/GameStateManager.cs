@@ -3,25 +3,18 @@ using Microsoft.Xna.Framework;
 
 namespace MmgEngine;
 
-public class SwitchingGameStateEventArgs<TGameState> : EventArgs where TGameState : GameState
+public class SwitchingGameStateEventArgs<TGameState>(TGameState? oldGameState, TGameState? newGameState) : EventArgs
+    where TGameState : GameState
 {
-    public SwitchingGameStateEventArgs(TGameState? oldGameState, TGameState? newGameState)
-    {
-        OldGameState = oldGameState;
-        NewGameState = newGameState;
-    }
-
-    public TGameState? OldGameState { get; }
-    public TGameState? NewGameState { get; }
+    public TGameState? OldGameState { get; } = oldGameState;
+    public TGameState? NewGameState { get; } = newGameState;
 }
 
-public class GameStateManager : GameStateManager<GameState>
-{
-    // Move constructor up once upgraded to .Net 8
-    public GameStateManager(GameComponentCollection gameComponentCollection) : base(gameComponentCollection) { }
-}
+public class GameStateManager(GameComponentCollection gameComponentCollection)
+    : GameStateManager<GameState>(gameComponentCollection);
 
-public class GameStateManager<TGameState> where TGameState : GameState
+public class GameStateManager<TGameState>(GameComponentCollection gameComponentCollection)
+    where TGameState : GameState
 {
     public event EventHandler<SwitchingGameStateEventArgs<TGameState>>? Switched;
     
@@ -33,7 +26,7 @@ public class GameStateManager<TGameState> where TGameState : GameState
             Switched?.Invoke(this, new SwitchingGameStateEventArgs<TGameState>(_gameState, value));
             if (_gameState is not null)
             {
-                _components.Remove(_gameState);
+                gameComponentCollection.Remove(_gameState);
                 _gameState.OnStateSwitched -= OnStateSwitched;
                 _gameState.Dispose();
             }
@@ -42,17 +35,13 @@ public class GameStateManager<TGameState> where TGameState : GameState
             
             if (_gameState is null) return;
             
-            _components.Add(_gameState);
+            gameComponentCollection.Add(_gameState);
             
             _gameState.OnStateSwitched += OnStateSwitched;
         }
     }
 
-    private readonly GameComponentCollection _components;
     private TGameState? _gameState;
-
-    public GameStateManager(GameComponentCollection gameComponentCollection)
-        => _components = gameComponentCollection;
 
     private void OnStateSwitched(object? s, GameState e) => GameState = (TGameState)e;
 }

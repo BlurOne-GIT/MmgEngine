@@ -11,17 +11,13 @@ public interface ISyncRunnable
     protected void Run();
 }
 
-public abstract class DelayedAction : GameComponent, ISyncRunnable
+public abstract class DelayedAction(Game game, Action action) : GameComponent(game), ISyncRunnable
 {
-    private readonly Action _action;
-
-    protected DelayedAction(Game game, Action action) : base(game) => _action = action;
-    
     public virtual void End() => Game.Components.Remove(this);
 
     public void Run()
     {
-        _action();
+        action();
         End();
     }
 }
