@@ -26,7 +26,7 @@ public abstract class EngineGame : Game
 
     protected override void Initialize()
     {
-        var mouseHelper = new MouseHelper(this, false);
+        var mouseHelper = new ClickableWindow(this);
         Components.Add(mouseHelper);
         Services.AddService(mouseHelper);
         

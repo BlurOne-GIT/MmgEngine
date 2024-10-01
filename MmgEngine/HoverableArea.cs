@@ -14,13 +14,13 @@ public class HoverableArea : GameComponent
 
     public Vector2 Position
     {
-        get => _actionBox.Location.ToVector2() + _actionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft);
+        get => ActionBox.Location.ToVector2() + ActionBox.Size.ToVector2() * EngineStatics.Aligner(Alignment.TopLeft);
         set => _actionBox.Location = (value - _actionBox.Size.ToVector2() * EngineStatics.Aligner(_alignment)).ToPoint();
     }
 
     public Vector2 Size
     {
-        get => _actionBox.Size.ToVector2();
+        get => ActionBox.Size.ToVector2();
         set
         {
             var oldExternalLocation = Position;
@@ -29,9 +29,14 @@ public class HoverableArea : GameComponent
         }
     }
     
+    protected virtual Rectangle ActionBox => _actionBox;
     private Rectangle _actionBox;
     private readonly Alignment _alignment;
     public bool Hovering { get; private set; }
+    public static Point MousePoint { get; protected set; }
+    public static Vector2 MouseVector => MousePoint.ToVector2();
+    protected static MouseState LastMouseState;
+    private static long _lastGameTime = -1L;        
 
     public HoverableArea(Game game, Rectangle actionBox, Alignment alignment = Alignment.TopLeft) : base(game)
     {
@@ -45,9 +50,14 @@ public class HoverableArea : GameComponent
         if (!Game.IsActive)
             return;
 
-        var contains = _actionBox.Contains(
-                ((Mouse.GetState().Position.ToVector2() - EngineStatics.Offset) / EngineStatics.Scale).ToPoint()
-            );
+        if (gameTime.TotalGameTime.Ticks != _lastGameTime)
+        {
+            _lastGameTime = gameTime.TotalGameTime.Ticks;
+            LastMouseState = Mouse.GetState();
+            MousePoint = ((LastMouseState.Position.ToVector2() - EngineStatics.Offset) / EngineStatics.Scale).ToPoint();
+        }
+        
+        var contains = ActionBox.Contains(MousePoint);
         
         if (contains == Hovering)
             return;
