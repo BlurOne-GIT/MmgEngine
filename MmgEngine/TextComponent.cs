@@ -42,11 +42,8 @@ public class TextComponent : DrawableGameComponent
 
     private void RelocatePivot() => _pivot = Font.MeasureString(_text) * EngineStatics.Aligner(_anchor);
 
-    public override void Draw(GameTime gameTime)
-    {
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
-        spriteBatch.DrawString
-        (
+    public override void Draw(GameTime gameTime) =>
+        Game.Services.GetService<SpriteBatch>().DrawString(
             Font,
             Text,
             Position,
@@ -57,5 +54,4 @@ public class TextComponent : DrawableGameComponent
             SpriteEffects,
             DrawOrder * 0.1f
         );
-    }
 }

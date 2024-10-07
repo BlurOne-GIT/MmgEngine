@@ -77,8 +77,7 @@ public class SimpleImage : DrawableGameComponent
     public override void Draw(GameTime gameTime)
     {
         Animation?.NextFrame();
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
-        spriteBatch.Draw(
+        Game.Services.GetService<SpriteBatch>().Draw(
             Texture,
             Position,
             NullableCurrentSource,
@@ -108,8 +107,7 @@ public class SimpleImage : DrawableGameComponent
         )
     {
         if (scaleMultiplier == default) scaleMultiplier = Vector2.One;
-        var spriteBatch = Game.Services.GetService<SpriteBatch>();
-        spriteBatch.Draw(
+        Game.Services.GetService<SpriteBatch>().Draw(
             texture,
             Position + positionOffset,
             sourceRectangle,

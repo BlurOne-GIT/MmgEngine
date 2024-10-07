@@ -63,3 +63,36 @@ public class FrameDelayedAction : DelayedAction
         _delay = _originalDelay;
     }
 }
+
+public class LoopedAction(Game game, Action<ulong, TimeSpan> action, Func<ulong, TimeSpan, bool>? condition = null, Action? callback = null) : GameComponent(game), ISyncRunnable
+{
+    private ulong _frames;
+    private TimeSpan _elapsedTime = TimeSpan.Zero;
+
+    public override void Update(GameTime gameTime)
+    {
+        ++_frames;
+        _elapsedTime += gameTime.ElapsedGameTime;
+        if (condition is not null && !condition(_frames, _elapsedTime))
+        {
+            Run();
+            return;
+        }
+        
+        action(_frames, _elapsedTime);
+        base.Update(gameTime);
+    }
+
+    public void End()
+    {
+        Game.Components.Remove(this);
+        _frames = 0;
+        _elapsedTime = TimeSpan.Zero;
+    }
+
+    public void Run()
+    {
+        callback?.Invoke();
+        End();
+    }
+}
