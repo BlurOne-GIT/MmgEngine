@@ -17,8 +17,8 @@ public abstract class DelayedAction(Game game, Action action) : GameComponent(ga
 
     public void Run()
     {
-        action();
         End();
+        action();
     }
 }
 
@@ -98,7 +98,7 @@ public class LoopedAction(Game game, Action<ulong, TimeSpan> action, Func<ulong,
 
     public void Run()
     {
-        callback?.Invoke();
         End();
+        callback?.Invoke();
     }
 }
