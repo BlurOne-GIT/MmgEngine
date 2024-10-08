@@ -69,6 +69,12 @@ public class LoopedAction(Game game, Action<ulong, TimeSpan> action, Func<ulong,
     private ulong _frames;
     private TimeSpan _elapsedTime = TimeSpan.Zero;
 
+    public LoopedAction(Game game, Action<ulong, TimeSpan> action, ulong frames, Action? callback = null)
+        : this(game, action, (f, _) => f <= frames, callback) {}
+
+    public LoopedAction(Game game, Action<ulong, TimeSpan> action, TimeSpan time, Action? callback = null)
+        : this(game, action, (_, t) => t <= time, callback) {}
+    
     public override void Update(GameTime gameTime)
     {
         ++_frames;
