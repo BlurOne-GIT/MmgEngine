@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
 namespace MmgEngine;
@@ -101,4 +102,62 @@ public class LoopedAction(Game game, Action<ulong, TimeSpan> action, Func<ulong,
         End();
         callback?.Invoke();
     }
+}
+
+public abstract class YieldingAction<T>(Game game, IEnumerator<T> action) : GameComponent(game), ISyncRunnable
+{
+    protected readonly IEnumerator<T> Enumerator = action;
+    
+    public void End()
+    {
+        Game.Components.Remove(this);
+        Enumerator.Reset();
+    }
+
+    public abstract void Run();
+}
+
+public class TimeYieldingAction(Game game, IEnumerator<TimeSpan> action) : YieldingAction<TimeSpan>(game, action)
+{
+    private TimeSpan _delay = TimeSpan.Zero;
+
+    public override void Update(GameTime gameTime)
+    {
+        if (_delay > TimeSpan.Zero)
+        {
+            _delay -= gameTime.ElapsedGameTime;
+            return;
+        }
+
+        if (!Enumerator.MoveNext())
+        {
+            End();
+            return;
+        }
+
+        _delay = Enumerator.Current;
+    }
+
+    public override void Run() => _delay = TimeSpan.Zero;
+}
+
+public class FrameYieldingAction(Game game, IEnumerator<ulong> action) : YieldingAction<ulong>(game, action)
+{
+    private ulong _delay;
+
+    public override void Update(GameTime gameTime)
+    {
+        if (_delay-- > 0)
+            return;
+
+        if (!Enumerator.MoveNext())
+        {
+            End();
+            return;
+        }
+        
+        _delay = Enumerator.Current;
+    }
+    
+    public override void Run() => _delay = 0;
 }
